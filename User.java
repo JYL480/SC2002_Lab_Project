@@ -7,11 +7,7 @@ public class User {
     private String email;
 
     public User(){
-        this.userID = null;
-        this.password = null;
-        this.name = null;
-        this.faculty = null;
-        this.email = null;
+        this(null, null, null, null, null);
     }
     public User(String userID, String password, String name, String faculty, String email){
         this.userID = userID;

@@ -1,3 +1,15 @@
 public interface StaffReportInterface {
-    public Report generateReportOfStudentsAttendingSelfCreatedCamp(Camp camp);
-    public Report generatePerformanceReportOfCampCommitteMembers(Camp camp);
+
+	/**
+	 * 
+	 * @param Camp
+	 */
+	void generateReportOfStudentsAttendingSelfCreatedCamp(int Camp);
+
+	/**
+	 * 
+	 * @param Camp
+	 */
+	void generatePerformanceReportOfCampCommitteMembers(int Camp);
+
+}

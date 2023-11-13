@@ -7,6 +7,19 @@ public class Enquiry {
     public String repliedByName;
     public boolean repliedByStaff;
 
+    public Enquiry() {
+        this(null, null, null, false, null, null, false);
+    }
+
+    public Enquiry(String id, String subject, String description, boolean isProcessed, String replyText, String repliedByName, boolean repliedByStaff) {
+        this.id = id;
+        this.subject = subject;
+        this.description = description;
+        this.isProcessed = isProcessed;
+        this.replyText = replyText;
+        this.repliedByName = repliedByName;
+        this.repliedByStaff = repliedByStaff;
+    }
     public String getDescription() {
         return description;
     }

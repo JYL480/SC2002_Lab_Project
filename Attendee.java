@@ -12,23 +12,23 @@ public class Attendee extends User implements AttendeeEnquiryInterface, Attendee
 
 // Implementation of AttendeeEnquiryInterface
     public void submitEnquiry(Enquiry e){
-        this.equiryIdToEnquiyObjMap.put(e.getId(), e);
+        // this.equiryIdToEnquiyObjMap.put(e.getId(), e);
     }
     public ArrayList<Enquiry> viewAllEnquires(){
-        return new ArrayList<Enquiry>(this.equiryIdToEnquiyObjMap.values());
+        // return new ArrayList<Enquiry>(this.equiryIdToEnquiyObjMap.values());
     }
     public Enquiry viewEnquirybyId(String id){
-        return this.equiryIdToEnquiyObjMap.get(id);
+        // return this.equiryIdToEnquiyObjMap.get(id);
     }
     public void editEnquiry(Enquiry e, Enquiry newE){
-        this.equiryIdToEnquiyObjMap.remove(e.getId());
-        this.equiryIdToEnquiyObjMap.put(e.getId(), newE);
+        // this.equiryIdToEnquiyObjMap.remove(e.getId());
+        // this.equiryIdToEnquiyObjMap.put(e.getId(), newE);
     }
     public void deleteEnquiry(Enquiry e){
-        this.equiryIdToEnquiyObjMap.remove(e.getId());
+        // this.equiryIdToEnquiyObjMap.remove(e.getId());
     }
 // Implementation of AttendeeCampInterface
     public void registerForCampAsAttendee(Camp camp){
-        this.campIdToCampObjMap.put(camp.getId(), camp);
+        // this.campIdToCampObjMap.put(camp.getId(), camp);
     }
 }

@@ -1,26 +1,41 @@
-import java.util.*;
+import java.util.ArrayList;
 
-public class Student extends User implements StudentCampInterface  {
-    
-    private boolean isCampCommittee;
+public class Student extends User implements StudentCampInterface {
 
-    public Student(String userID, String password, String name, String faculty, String email, boolean isCampCommittee) {
-        super(userID, password, name, faculty, email);
-        this.isCampCommittee = isCampCommittee;
-    }
+	private boolean isCampCommittee;
 
-    public boolean getIsCampCommittee() {
-        return isCampCommittee;
-    }
-    public void setIsCampCommittee(boolean isCampCommittee) {
-        this.isCampCommittee = isCampCommittee;
-    }
+	public Student(String userID, String password, String name, String faculty, String email, boolean isCampCommittee) {
+		super(userID, password, name, faculty, email);
+		this.isCampCommittee = isCampCommittee;
+	}
 
-    public ArrayList<Camp> viewListOfCamps() {
-        return listOfCamps;
-    }
-    public int viewCampRemainingSlots(Camp camp) {
-        return camp.remainingSlots;
-    }
-    
+
+	public boolean getIsCampCommittee() {
+		return this.isCampCommittee;
+	}
+
+	/**
+	 * 
+	 * @param isCampCommittee
+	 */
+	public void setIsCampCommittee(boolean isCampCommittee) {
+		this.isCampCommittee = isCampCommittee;
+	}
+
+	public ArrayList<Camp> viewListOfCamps() {
+		// TODO - implement Student.viewListOfCamps
+		throw new UnsupportedOperationException();
+
+	}
+
+	/**
+	 * 
+	 * @param Camp
+	 */
+	public int viewCampRemainingSlots(int Camp) {
+		// TODO - implement Student.viewCampRemainingSlots
+		throw new UnsupportedOperationException();
+	
+	}
+
 }

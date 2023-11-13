@@ -1,8 +1,31 @@
 import java.util.ArrayList;
 
 public interface StaffCampCommitteeInterface {
-    public ArrayList<Suggestion> viewCommiteeMembersSuggestionsByCamp(Camp camp);
-    public String givePerformanceReview(Performance performance, CampCommiteeMember campcommiteemember);
-    public String editPerformanceReview(Performance performance, CampCommiteeMember campcommiteemember);
-    public String deletePerformanceReview(CampCommiteeMember campcommiteemember);
+
+	/**
+	 * 
+	 * @param Camp
+	 */
+	ArrayList<Suggestion> viewCommitteeMembersSuggetionsByCamp(int Camp);
+
+	/**
+	 * 
+	 * @param CampCommitteeMember
+	 * @param Performance
+	 */
+	void givePerformanceReview(int CampCommitteeMember, int Performance);
+
+	/**
+	 * 
+	 * @param CampCommitteeMember
+	 * @param Performance
+	 */
+	void editPerformanceReview(int CampCommitteeMember, int Performance);
+
+	/**
+	 * 
+	 * @param CampCommitteeMember
+	 */
+	void deletePerformanceReview(int CampCommitteeMember);
+
 }

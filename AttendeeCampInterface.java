@@ -1,3 +1,4 @@
 public interface AttendeeCampInterface {
-    public void registerForCampAsAttendee(Camp camp);
+	void registerForCampAsAttendee(int Camp);
+
 }

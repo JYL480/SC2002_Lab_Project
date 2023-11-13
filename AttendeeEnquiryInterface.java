@@ -1,10 +1,32 @@
-import java.util.*;
+import java.util.ArrayList;
 
 public interface AttendeeEnquiryInterface {
 
-    public void submitEnquiry(Enquiry e);
-    public ArrayList<Enquiry> viewAllEnquires();
-    public Enquiry viewEnquirybyId(String id);
-    public void editEnquiry(Enquiry e, Enquiry newE);
-    public void deleteEnquiry(Enquiry e);
+	/**
+	 * 
+	 * @param Enquiry
+	 */
+	void submitEnquiry(int Enquiry);
+
+	ArrayList<Enquiry> viewAllEnquires();
+
+	/**
+	 * 
+	 * @param String
+	 */
+	Enquiry viewEnquirybyId(int String);
+
+	/**
+	 * 
+	 * @param Enquiry
+	 * @param parameter
+	 */
+	void editEnquiry(int Enquiry, int parameter);
+
+	/**
+	 * 
+	 * @param Enquiry
+	 */
+	void deleteEnquiry(int Enquiry);
+
 }
