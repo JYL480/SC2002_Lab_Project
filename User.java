@@ -1,6 +1,6 @@
 
 public class User {
-    private String userID;
+    private String id;
     private String password;
     private String name;
     private String faculty;
@@ -9,8 +9,8 @@ public class User {
     public User(){
         this(null, null, null, null, null);
     }
-    public User(String userID, String password, String name, String faculty, String email){
-        this.userID = userID;
+    public User(String id, String password, String name, String faculty, String email){
+        this.id = id;
         this.password = password;
         this.name = name;
         this.faculty = faculty;
@@ -18,7 +18,7 @@ public class User {
     }
 
     public String getUser(){
-        return userID;
+        return id;
     }
     public String getPass(){
         return password;

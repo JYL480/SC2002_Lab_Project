@@ -4,8 +4,8 @@ import java.util.ArrayList;
 public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffCampCommitteeInterface, StaffCampInterface, StaffReportInterface {
 
 
-	public Staff(String userID, String password, String name, String faculty, String email) {
-        super(userID, password, name, faculty, email);
+	public Staff(String id, String password, String name, String faculty, String email) {
+        super(id, password, name, faculty, email);
     }
 
 	/**

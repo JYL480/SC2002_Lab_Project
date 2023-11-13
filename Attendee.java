@@ -5,8 +5,8 @@ public class Attendee extends User implements AttendeeEnquiryInterface, Attendee
     private Camp camp;
     // need add in attribute for the enquiryIdToEnquiyObjMap and campIdToCampObjMap
 
-    public Attendee(String userID, String password, String name, String faculty, String email){
-        super(userID, password, name, faculty, email);
+    public Attendee(String id, String password, String name, String faculty, String email){
+        super(id, password, name, faculty, email);
         this.camp = null;
     }
 

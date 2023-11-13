@@ -4,8 +4,8 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 
 	private int points;
 
-	public CampCommitteeMember(String userID, String password, String name, String faculty, String email, boolean isCampCommittee, int points) {
-        super(userID, password, name, faculty, email, isCampCommittee);
+	public CampCommitteeMember(String id, String password, String name, String faculty, String email, boolean isCampCommittee, int points) {
+        super(id, password, name, faculty, email, isCampCommittee);
         this.points = points;
     }
 

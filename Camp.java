@@ -1,21 +1,22 @@
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class Camp {
 
 	private String id;
 	private String name;
 	private boolean isVisible;
-	private DateTime startDate;
-	private DateTime endDate;
-	private DateTime regClosingDate;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
+	private LocalDateTime regClosingDate;
 	private ArrayList<String> userGroupOpened;
 	private String location;
 	private int totalSlots;
 	private int campCommitteeSlots;
 	private String description;
 
-	public Camp(String id, String name, boolean isVisible, DateTime startDate, 
-	DateTime endDate, DateTime regClosingDate,
+	public Camp(String id, String name, boolean isVisible, LocalDateTime startDate, 
+	LocalDateTime endDate, LocalDateTime regClosingDate,
 	ArrayList<String> userGroupOpened, String location, 
 	int totalSlots, int campCommitteeSlots, String description){
 		this.id = id;
@@ -44,15 +45,15 @@ public class Camp {
 		return this.isVisible;
 	}
 
-	public DateTime getStartDate() {
+	public LocalDateTime getStartDate() {
 		return this.startDate;
 	}
 
-	public DateTime getEndDate() {
+	public LocalDateTime getEndDate() {
 		return this.endDate;
 	}
 
-	public DateTime getRegClosingDate() {
+	public LocalDateTime getRegClosingDate() {
 		return this.regClosingDate;
 	}
 
@@ -104,7 +105,7 @@ public class Camp {
 	 * 
 	 * @param startDate
 	 */
-	public void setStartDate(DateTime startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
@@ -112,7 +113,7 @@ public class Camp {
 	 * 
 	 * @param endDate
 	 */
-	public void setEndDate(DateTime endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
@@ -120,7 +121,7 @@ public class Camp {
 	 * 
 	 * @param regClosingDate
 	 */
-	public void setRegClosingDate(DateTime regClosingDate) {
+	public void setRegClosingDate(LocalDateTime regClosingDate) {
 		this.regClosingDate = regClosingDate;
 	}
 
@@ -164,6 +165,24 @@ public class Camp {
 		this.description = description;
 	}
 
+	// public static void main(String[] args) {
+    //     Camp camp = new Camp("123", "MyCamp", true, null, null, null,
+    //             new ArrayList<>(), "CampLocation", 100, 10, "Description");
 
+    //     LocalDateTime customStartDate = LocalDateTime.of(2023, 11, 13, 10, 0);
+    //     camp.setStartDate(customStartDate);
 
+    //     LocalDateTime customEndDate = LocalDateTime.of(2023, 11, 15, 16, 30);
+    //     camp.setEndDate(customEndDate);
+
+    //     LocalDateTime customRegClosingDate = LocalDateTime.of(2023, 11, 10, 23, 59);
+    //     camp.setRegClosingDate(customRegClosingDate);
+
+    //     // Other setters can be used similarly
+	// 	System.out.println(camp.getRegClosingDate());
+	// 	System.out.println(camp.getStartDate());
+    // }
 }
+
+
+
