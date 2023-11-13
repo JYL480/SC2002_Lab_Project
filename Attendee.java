@@ -1,28 +1,15 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Attendee extends User implements AttendeeEnquiryInterface, AttendeeCampInterface{
-    private HashMap<String, Enquiry> equiryIdToEnquiyObjMap;
-    private HashMap<String, Camp> campIdToCampObjMap;
+    private Camp camp;
+    // need add in attribute for the enquiryIdToEnquiyObjMap and campIdToCampObjMap
 
     public Attendee(String userID, String password, String name, String faculty, String email){
         super(userID, password, name, faculty, email);
-        this.equiryIdToEnquiyObjMap = new HashMap<>();
-        this.campIdToCampObjMap = new HashMap<>();
+        this.camp = null;
     }
 
-    public HashMap<String, Camp> getCampIdToCampObjMap() {
-        return campIdToCampObjMap;
-    }
-    public HashMap<String, Enquiry> getEquiryIdToEnquiyObjMap() {
-        return equiryIdToEnquiyObjMap;
-    }
-    public void setCampIdToCampObjMap(HashMap<String, Camp> campIdToCampObjMap) {
-        this.campIdToCampObjMap = campIdToCampObjMap;
-    }
-    public void setEquiryIdToEnquiyObjMap(HashMap<String, Enquiry> equiryIdToEnquiyObjMap) {
-        this.equiryIdToEnquiyObjMap = equiryIdToEnquiyObjMap;
-    }
 // Implementation of AttendeeEnquiryInterface
     public void submitEnquiry(Enquiry e){
         this.equiryIdToEnquiyObjMap.put(e.getId(), e);
