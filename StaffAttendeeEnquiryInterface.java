@@ -1,19 +1,9 @@
 
 import java.util.ArrayList;
+// import java.util.*;
 
 public interface StaffAttendeeEnquiryInterface {
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	ArrayList<Enquiry> viewAllAttendeeEnquiriesByCamp(int Camp);
-
-	/**
-	 * 
-	 * @param Enquiry
-	 * @param String
-	 */
-	void replyToAttendeeEnquiry(int Enquiry, int String);
-
+    public ArrayList<Enquiry> viewAllAttendeesEnquiriesByCamp(Camp camp);
+    public void replyToAttendeeEnquiry(Enquiry e, String text);
 }

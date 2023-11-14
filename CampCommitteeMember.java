@@ -9,10 +9,6 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
         this.points = points;
     }
 
-	/**
-	 * 
-	 * @param points
-	 */
 	public void setPoints(int points) {
 		this.points = points;
 	}
@@ -21,72 +17,51 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 		return this.points;
 	}
 
-	/**
-	 * 
-	 * @param Suggestion
-	 */
-	public void submitSuggestion(int Suggestion) {
-		// TODO - implement CampCommitteeMember.submitSuggestion
-		throw new UnsupportedOperationException();
-	}
+	public void submitSuggestion(Suggestion suggestion) {
+			// Implement logic to submit a suggestion
+		}
 
+	@Override
 	public ArrayList<Suggestion> viewAllSuggestions() {
-		// TODO - implement CampCommitteeMember.viewAllSuggestions
-		throw new UnsupportedOperationException();
+		// Implement logic to view all suggestions
+		return new ArrayList<>();
 	}
 
-	/**
-	 * 
-	 * @param String
-	 */
-	public Suggestion viewSuggestionById(int String) {
-		// TODO - implement CampCommitteeMember.viewSuggestionById
-		throw new UnsupportedOperationException();
+	@Override
+	public Suggestion viewSuggestionById(String suggestionID) {
+		// Implement logic to view a suggestion by ID
+		return new Suggestion(); // Replace with actual logic
 	}
 
-	/**
-	 * 
-	 * @param text
-	 * @param Suggestion
-	 */
-	public void editSuggestionById(int text, int Suggestion) {
-		// TODO - implement CampCommitteeMember.editSuggestionById
-		throw new UnsupportedOperationException();
+	@Override
+	public void editSuggestionById(String text, Suggestion suggestion) {
+		// Implement logic to edit a suggestion by ID
 	}
 
-	/**
-	 * 
-	 * @param String
-	 */
-	public void deleteSuggestionById(int String) {
-		// TODO - implement CampCommitteeMember.deleteSuggestionById
-		throw new UnsupportedOperationException();
+	@Override
+	public void deleteSuggestionById(String suggestionID) {
+		// Implement logic to delete a suggestion by ID
 	}
 
+	@Override
 	public ArrayList<Enquiry> viewAllAttendeeEnquiries() {
-		// TODO - implement CampCommitteeMember.viewAllAttendeeEnquiries
-		throw new UnsupportedOperationException();
+		// Implement logic to view all attendee enquiries
+		return new ArrayList<>();
 	}
 
-	/**
-	 * 
-	 * @param Enquiry
-	 * @param text
-	 * @param Attendee
-	 */
-	public void replyToAttendeeEnquiry(int Enquiry, int text, int Attendee) {
-		// TODO - implement CampCommitteeMember.replyToAttendeeEnquiry
-		throw new UnsupportedOperationException();
+	@Override
+	public void replyToAttendeeEnquiry(Enquiry e, String text, Attendee a) {
+		// Implement logic to reply to an attendee enquiry
 	}
 
+	@Override
 	public void registerForCampAsCampCommittee() {
-		// TODO - implement CampCommitteeMember.registerForCampAsCampCommittee
-		throw new UnsupportedOperationException();
+		// Implement logic to register for a camp as a camp committee member
 	}
 
+	@Override
 	public String getCampDetails() {
-		// TODO - implement CampCommitteeMember.getCampDetails
-		throw new UnsupportedOperationException();
+		// Implement logic to get camp details
+		return "Camp details"; // Replace with actual logic
 	}
-
-}
+	}

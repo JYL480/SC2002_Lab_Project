@@ -1,124 +1,80 @@
 import java.util.ArrayList;
 
-
 public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffCampCommitteeInterface, StaffCampInterface, StaffReportInterface {
 
-
-	public Staff(String id, String password, String name, String faculty, String email) {
+    public Staff(String id, String password, String name, String faculty, String email) {
         super(id, password, name, faculty, email);
     }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public ArrayList<Enquiry> viewAllAttendeeEnquiriesByCamp(int Camp) {
-		// TODO - implement Staff.viewAllAttendeeEnquiriesByCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public ArrayList<Enquiry> viewAllAttendeesEnquiriesByCamp(Camp camp) {
+        // Implement logic to view all attendee enquiries for a specific camp
+        return new ArrayList<>();
+    }
 
-	/**
-	 * 
-	 * @param Enquiry
-	 * @param String
-	 */
-	public void replyToAttendeeEnquiry(int Enquiry, int String) {
-		// TODO - implement Staff.replyToAttendeeEnquiry
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void replyToAttendeeEnquiry(Enquiry e, String text) {
+        // Implement logic to reply to an attendee enquiry
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public ArrayList<Suggestion> viewCommitteeMembersSuggetionsByCamp(int Camp) {
-		// TODO - implement Staff.viewCommitteeMembersSuggetionsByCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public ArrayList<Suggestion> viewCommiteeMembersSuggestionsByCamp(Camp camp) {
+        // Implement logic to view committee members' suggestions for a specific camp
+        return new ArrayList<>();
+    }
 
-	/**
-	 * 
-	 * @param CampCommitteeMember
-	 * @param Performance
-	 */
-	public void givePerformanceReview(int CampCommitteeMember, int Performance) {
-		// TODO - implement Staff.givePerformanceReview
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String givePerformanceReview(Performance performance, CampCommitteeMember campCommitteeMember) {
+        // Implement logic to give performance review to a camp committee member
+        return "Performance review given";
+    }
 
-	/**
-	 * 
-	 * @param CampCommitteeMember
-	 * @param Performance
-	 */
-	public void editPerformanceReview(int CampCommitteeMember, int Performance) {
-		// TODO - implement Staff.editPerformanceReview
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String editPerformanceReview(Performance performance, CampCommitteeMember campCommitteeMember) {
+        // Implement logic to edit performance review of a camp committee member
+        return "Performance review edited";
+    }
 
-	/**
-	 * 
-	 * @param CampCommitteeMember
-	 */
-	public void deletePerformanceReview(int CampCommitteeMember) {
-		// TODO - implement Staff.deletePerformanceReview
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String deletePerformanceReview(CampCommitteeMember campCommitteeMember) {
+        // Implement logic to delete performance review of a camp committee member
+        return "Performance review deleted";
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public void createCamp(int Camp) {
-		// TODO - implement Staff.createCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void createCamp() {
+        // Implement logic to create a camp
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public void deleteCamp(int Camp) {
-		// TODO - implement Staff.deleteCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void deleteCamp() {
+        // Implement logic to delete a camp
+    }
 
-	public ArrayList<Camp> viewAllCamps() {
-		// TODO - implement Staff.viewAllCamps
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public ArrayList<Camp> viewAllCamps() {
+        // Implement logic to view all camps
+        return new ArrayList<>();
+    }
 
-	public ArrayList<Camp> viewSelfCreatedCamps() {
-		// TODO - implement Staff.viewSelfCreatedCamps
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public ArrayList<Camp> viewSelfCreatedCamps() {
+        // Implement logic to view camps created by the staff
+        return new ArrayList<>();
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 * @param parameter
-	 */
-	public void editCamp(int Camp, int parameter) {
-		// TODO - implement Staff.editCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void editCamps(Camp camp) {
+        // Implement logic to edit a camp
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public void generateReportOfStudentsAttendingSelfCreatedCamp(int Camp) {
-		// TODO - implement Staff.generateReportOfStudentsAttendingSelfCreatedCamp
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void generateReportOfStudentsAttendingSelfCreatedCamp(Camp camp) {
+        // Implement logic to generate a report of students attending a self-created camp
+    }
 
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public void generatePerformanceReportOfCampCommitteMembers(int Camp) {
-		// TODO - implement Staff.generatePerformanceReportOfCampCommitteMembers
-		throw new UnsupportedOperationException();
-	}
-
+    @Override
+    public void generatePerformanceReportOfCampCommitteeMembers(Camp camp) {
+        // Implement logic to generate a performance report of camp committee members for a specific camp
+    }
 }

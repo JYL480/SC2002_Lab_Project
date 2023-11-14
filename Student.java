@@ -10,32 +10,20 @@ public class Student extends User implements StudentCampInterface {
 	}
 
 
-	public boolean getIsCampCommittee() {
-		return this.isCampCommittee;
+    public boolean getIsCampCommittee() {
+        return isCampCommittee;
+    }
+    public void setIsCampCommittee(boolean isCampCommittee) {
+        this.isCampCommittee = isCampCommittee;
+    }
+
+    public ArrayList<Camp> viewListOfCamps() {
+        return listOfCamps;
+    }
+	public int viewCampRemainingSlots(int campId){
+		Camp c = DB_Camp.readCamp(campId);
+		return c.totalSlots;
 	}
 
-	/**
-	 * 
-	 * @param isCampCommittee
-	 */
-	public void setIsCampCommittee(boolean isCampCommittee) {
-		this.isCampCommittee = isCampCommittee;
-	}
-
-	public ArrayList<Camp> viewListOfCamps() {
-		// TODO - implement Student.viewListOfCamps
-		throw new UnsupportedOperationException();
-
-	}
-
-	/**
-	 * 
-	 * @param Camp
-	 */
-	public int viewCampRemainingSlots(int Camp) {
-		// TODO - implement Student.viewCampRemainingSlots
-		throw new UnsupportedOperationException();
-	
-	}
 
 }

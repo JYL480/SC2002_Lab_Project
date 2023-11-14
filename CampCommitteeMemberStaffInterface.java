@@ -2,31 +2,15 @@ import java.util.ArrayList;
 
 public interface CampCommitteeMemberStaffInterface {
 
-	/**
-	 * 
-	 * @param Suggestion
-	 */
-	void submitSuggestion(int Suggestion);
 
-	ArrayList<Suggestion> viewAllSuggestions();
+	public void submitSuggestion(Suggestion suggestion);
 
-	/**
-	 * 
-	 * @param String
-	 */
-	Suggestion viewSuggestionById(int String);
+	public ArrayList<Suggestion> viewAllSuggestions();
 
-	/**
-	 * 
-	 * @param text
-	 * @param Suggestion
-	 */
-	void editSuggestionById(int text, int Suggestion);
+	public Suggestion viewSuggestionById(String suggestionID);
 
-	/**
-	 * 
-	 * @param String
-	 */
-	void deleteSuggestionById(int String);
+	public void editSuggestionById(String text, Suggestion suggestion);
+
+	public void deleteSuggestionById(String suggestionID);
 
 }
