@@ -84,7 +84,7 @@ public class LoginManager {
         // Username not found, or an error occurred
     }
 
-    public static void main(String[] args) {
+    //public static void main(String[] args) {
         // Example usage
         //boolean result = isValidLoginStudent("sally@mail.com", "password1");
         // boolean result1 = isValidLoginStaff("mike@hotmail.com", "password");
@@ -96,5 +96,5 @@ public class LoginManager {
         // result2 = isValidLoginAttendee("sally@mail.com", "password1");
         // System.out.println("Login result: " + result2);
 
-    }
+    //}
 }
