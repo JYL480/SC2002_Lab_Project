@@ -7,15 +7,32 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     }
 
     @Override
-    public ArrayList<Enquiry> viewAllAttendeesEnquiriesByCampId(String campId) {
+    public ArrayList<Pair<Enquiry, Attendee>>viewAllAttendeesEnquiriesByCampId(String campId) {
 
+        ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);\
+         ArrayList<Pair<Enquiry, Attendee>> enquiryAttendeePairs = new ArrayList<>();
+        for(String aId: attendeeIds)
+        {
+            ArrayList<String> tmp = DB_AttendeeIdToEnquiryId.getEnquiryIds(aId);
+            Attendee attendee = DB_Attendee.readAttendee(aId);
+            for(String eId: tmp)
+            {
+                Enquiry enquiry = DB_Enquiry.readEnquiry(eId);
+                enquiryIds.add(new Pair<>(enquiry, attendee));
+            }
+        }
         // Implement logic to view all attendee enquiries for a specific camp
-        return new ArrayList<>();
+        return enquiryAttendeePairs;
     }
 
     @Override
     public void replyToAttendeeEnquiry(String enquiryId, String replyStr) {
         // Implement logic to reply to an attendee enquiry
+        Enquiry enquiry = DB_Enquiry.readEnquiry(enquiryId);
+        enquiry.setReplyText(replyStr);
+        enquiry.setRepliedByName(this.name);
+        enquiry.setRepliedByStaff(true);
+        DB_Enquiry.updateEnquiry(enquiry);
     }
 
     @Override
@@ -46,10 +63,10 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     public void createCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
         // Implement logic to create a camp
         DB_Camp.createCamp(camp);
-        DB_StaffIdToCampId.createMapping(self.id, camp.getId());
+        DB_StaffIdToCampId.createMapping(this.id, camp.getId());
         for(Faculty f: allowedFaculty)
         {
-            DB_CampIdToFacultyId.createMapping(self.id, f.getId());
+            DB_CampIdToFacultyId.createMapping(this.id, f.getId());
         }
         
     }
@@ -58,8 +75,9 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     public void deleteCamp(String campId) {
         // Implement logic to delete a camp
         DB_Camp.deleteCamp(campId);
-        DB_StaffIdToCampId.deleteMapping(self.id, campId);
+        DB_StaffIdToCampId.deleteMapping(this.id, campId);
         DB_CampIdToFacultyId.deleteMappingsByCampId(campId);
+        DB_AttendeeIdToCampId.deleteMappingsByCampId(campId);
     }
 
     @Override
@@ -71,7 +89,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     @Override
     public ArrayList<Camp> viewSelfCreatedCamps() {
         // Implement logic to view camps created by the staff
-        ArrayList<String> campIds = DB_StaffIdToCampId.getCampIds(self.id);
+        ArrayList<String> campIds = DB_StaffIdToCampId.getCampIds(this.id);
         ArrayList<Camp> camps; 
         for(String id: campsIds)
         {
