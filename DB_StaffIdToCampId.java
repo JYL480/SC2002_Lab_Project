@@ -40,7 +40,7 @@ public class DB_StaffIdToCampId {
     }
 
     public static ArrayList<String> getCampIds(String staffId) {
-        ArrayList<String> campIds = new ArrayList<>();
+         ArrayList<String> campIds = new ArrayList<>();
 
         try (FileInputStream file = new FileInputStream(FILE_PATH);
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -54,8 +54,9 @@ public class DB_StaffIdToCampId {
 
                 if (staffId.equals(currentStaffId)) {
                     // Matching Staff ID found, add corresponding Camp ID to the list
-                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    campIds.add(currentCampId);
+                    String campId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    campIds.add(campId);
+                    
                 }
             }
 
@@ -66,8 +67,8 @@ public class DB_StaffIdToCampId {
         return campIds;
     }
 
-    public static ArrayList<String> getStaffIds(String campId) {
-        ArrayList<String> staffIds = new ArrayList<>();
+    public static String getStaffId(String campId) {
+        String staffId = "";
 
         try (FileInputStream file = new FileInputStream(FILE_PATH);
              Workbook workbook = new XSSFWorkbook(file)) {
@@ -81,8 +82,8 @@ public class DB_StaffIdToCampId {
 
                 if (campId.equals(currentCampId)) {
                     // Matching Camp ID found, add corresponding Staff ID to the list
-                    String currentStaffId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    staffIds.add(currentStaffId);
+                    staffId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    
                 }
             }
 
@@ -90,7 +91,7 @@ public class DB_StaffIdToCampId {
             e.printStackTrace(); // Handle the exception according to your needs
         }
 
-        return staffIds;
+        return staffId;
     }
 
     // Additional methods (create/update/delete) can be added as needed
@@ -135,6 +136,44 @@ public class DB_StaffIdToCampId {
         }
 
         // Mapping not found
+    }
+    
+    public static void deleteMappingsByCampId(String campId) {
+        try (FileInputStream file = new FileInputStream(FILE_PATH);
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+
+            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+                Row row = sheet.getRow(i);
+
+                if (row != null) {
+                    String currentStaffId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+
+                    if (campId.trim().equals(currentCampId)) {
+                        // Remove the row
+                        sheet.removeRow(row);
+
+                        // If the row is not the last row, shift the remaining rows up to fill the gap
+                        if (i < sheet.getLastRowNum()) {
+                            sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+                        }
+
+                        // Save the changes to the file
+                        try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
+                            workbook.write(fileOut);
+                        }
+
+                        // Adjust the row index after deletion
+                        i--;
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
     }
 
     public static boolean isExists(String staffId, String campId) {

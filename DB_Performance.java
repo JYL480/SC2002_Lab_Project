@@ -216,5 +216,5 @@ public class DB_Performance {
     //     for (Performance performance : performancesAfterDeletion) {
     //         System.out.println(performance.getAreasDoneWell());
     //     }
-    }
+    // }
 }
