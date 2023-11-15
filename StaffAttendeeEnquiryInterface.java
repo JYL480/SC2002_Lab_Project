@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 public interface StaffAttendeeEnquiryInterface {
 
-    public ArrayList<Enquiry> viewAllAttendeesEnquiriesByCamp(Camp camp);
-    public void replyToAttendeeEnquiry(Enquiry e, String text);
+    public ArrayList<Enquiry> viewAllAttendeesEnquiriesByCampId(String campId);
+    public void replyToAttendeeEnquiry(String enquiryId, String replyStr);
 }

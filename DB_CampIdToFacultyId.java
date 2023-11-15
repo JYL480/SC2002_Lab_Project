@@ -135,6 +135,44 @@ public static void deleteMapping(String campId, String facultyId) {
     // Mapping not found
 }
 
+public static void deleteMappingsByCampId(String campId) {
+    try (FileInputStream file = new FileInputStream(FILE_PATH);
+         Workbook workbook = new XSSFWorkbook(file)) {
+
+        Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+
+        for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
+            Row row = sheet.getRow(i);
+
+            if (row != null) {
+                String currentCampId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+
+                if (campId.trim().equals(currentCampId)) {
+                    // Remove the row
+                    sheet.removeRow(row);
+
+                    // If the row is not the last row, shift the remaining rows up to fill the gap
+                    if (i < sheet.getLastRowNum()) {
+                        sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
+                    }
+
+                    // Save the changes to the file
+                    try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
+                        workbook.write(fileOut);
+                    }
+
+                    // Adjust the row index after deletion
+                    i--;
+                }
+            }
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace(); // Handle the exception according to your needs
+    }
+}
+
+
 public static boolean isExists(String campId, String facultyId) {
     try (FileInputStream file = new FileInputStream(FILE_PATH);
          Workbook workbook = new XSSFWorkbook(file)) {

@@ -184,37 +184,37 @@ public class DB_Performance {
         return performances;
     }
     
-    public static void main(String[] args) {
-        // Test createPerformance
-        Performance performanceOne = new Performance("performance1", 4, "Well done in teamwork", "Time management", true);
-        Performance performanceTwo = new Performance("performance2", 5, "Excellent communication skills", "None", false);
+    // public static void main(String[] args) {
+    //     // Test createPerformance
+    //     Performance performanceOne = new Performance("performance1", 4, "Well done in teamwork", "Time management", true);
+    //     Performance performanceTwo = new Performance("performance2", 5, "Excellent communication skills", "None", false);
 
-        DB_Performance.createPerformance(performanceOne);
-        DB_Performance.createPerformance(performanceTwo);
+    //     DB_Performance.createPerformance(performanceOne);
+    //     DB_Performance.createPerformance(performanceTwo);
 
-        // Test readPerformance
-        Performance retrievedPerformance = DB_Performance.readPerformance("performance1");
-        System.out.println("Retrieved Performance: " + retrievedPerformance.getAreasDoneWell());
+    //     // Test readPerformance
+    //     Performance retrievedPerformance = DB_Performance.readPerformance("performance1");
+    //     System.out.println("Retrieved Performance: " + retrievedPerformance.getAreasDoneWell());
 
-        // Test updatePerformance
-        Performance updatedPerformance = new Performance("performance1", 5, "Outstanding teamwork", "Time management", true);
-        DB_Performance.updatePerformance(updatedPerformance);
+    //     // Test updatePerformance
+    //     Performance updatedPerformance = new Performance("performance1", 5, "Outstanding teamwork", "Time management", true);
+    //     DB_Performance.updatePerformance(updatedPerformance);
 
-        // Test getAllPerformances
-        System.out.println("\nAll Performances:");
-        ArrayList<Performance> allPerformances = DB_Performance.getAllPerformances();
-        for (Performance performance : allPerformances) {
-            System.out.println(performance.getAreasDoneWell());
-        }
+    //     // Test getAllPerformances
+    //     System.out.println("\nAll Performances:");
+    //     ArrayList<Performance> allPerformances = DB_Performance.getAllPerformances();
+    //     for (Performance performance : allPerformances) {
+    //         System.out.println(performance.getAreasDoneWell());
+    //     }
 
-        // Test deletePerformance
-        DB_Performance.deletePerformance("performance1");
+    //     // Test deletePerformance
+    //     DB_Performance.deletePerformance("performance1");
 
-        // Test getAllPerformances after deletion
-        System.out.println("\nAll Performances after Deletion:");
-        ArrayList<Performance> performancesAfterDeletion = DB_Performance.getAllPerformances();
-        for (Performance performance : performancesAfterDeletion) {
-            System.out.println(performance.getAreasDoneWell());
-        }
+    //     // Test getAllPerformances after deletion
+    //     System.out.println("\nAll Performances after Deletion:");
+    //     ArrayList<Performance> performancesAfterDeletion = DB_Performance.getAllPerformances();
+    //     for (Performance performance : performancesAfterDeletion) {
+    //         System.out.println(performance.getAreasDoneWell());
+    //     }
     }
 }
