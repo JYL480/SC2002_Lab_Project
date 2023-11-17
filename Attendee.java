@@ -10,25 +10,45 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
 // Implementation of AttendeeEnquiryInterface
     public void submitEnquiry(Enquiry e){
         // this.equiryIdToEnquiyObjMap.put(e.getId(), e);
+        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
+        DB_Enquiry.createEnquiry(e);
     }
     public ArrayList<Enquiry> viewAllEnquires(){
-        return null;
-        // return new ArrayList<Enquiry>(this.equiryIdToEnquiyObjMap.values());
+        ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
+        return enquiries;
     }
-    public Enquiry viewEnquirybyId(String id){
-        return null;
-        // return this.equiryIdToEnquiyObjMap.get(id);
+
+    public ArrayList<Enquiry> viewEnquirybyId(String id){
+        // Enquiry e = DB_Enquiry.readEnquiry(id);
+        ArrayList<Enquiry> Enquirys = new ArrayList<>();
+		ArrayList<Enquiry> Enquiryss = DB_Enquiry.getAllEnquiries();
+
+		for(Enquiry ss: Enquiryss){
+			if(id.equals(ss.getId())){
+				Enquirys.add(ss);
+			}
+		}
+		
+        return Enquirys;
     }
     public void editEnquiry(Enquiry e, Enquiry newE){
-        
-        // this.equiryIdToEnquiyObjMap.remove(e.getId());
-        // this.equiryIdToEnquiyObjMap.put(e.getId(), newE);
+        DB_Enquiry.updateEnquiry(newE);
     }
     public void deleteEnquiry(Enquiry e){
-        // this.equiryIdToEnquiyObjMap.remove(e.getId());
+        DB_AttendeeIdToEnquiryId.deleteMapping(getId(), e.getId());
+        DB_Enquiry.deleteEnquiry(e.getId());
     }
 // Implementation of AttendeeCampInterface
     public void registerForCampAsAttendee(Camp camp){
-        // this.campIdToCampObjMap.put(camp.getId(), camp);
+        if(camp.getTotalSlots() == 0){
+            System.out.println("The camp is full");
+            return;
+        }
+        if(!DB_AttendeeIdToCampId.isExists(getId(), camp.getId())){
+            DB_AttendeeIdToCampId.createMapping(this.getId(), camp.getId());
+            System.out.println("lasjhsakjdhsajdjhsadkjh");
+            camp.setTotalSlots(camp.getTotalSlots() - 1);
+            DB_Camp.updateCamp(camp);
+        }
     }
 }
