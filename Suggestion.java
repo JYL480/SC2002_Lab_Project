@@ -27,26 +27,15 @@ public class Suggestion {
 		return this.isProcessed;
 	}
 
-	/**
-	 * 
-	 * @param id
-	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/**
-	 * 
-	 * @param suggestionStr
-	 */
 	public void setSuggestionStr(String suggestionStr) {
 		this.suggestionStr = suggestionStr;
 	}
 
-	/**
-	 * 
-	 * @param isProcessed
-	 */
+
 	public void setIsProcessed(boolean isProcessed) {
 		this.isProcessed = isProcessed;
 	}

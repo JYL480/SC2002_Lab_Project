@@ -15,16 +15,21 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
     }
     public ArrayList<Enquiry> viewAllEnquires(){
         ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
-        for(Enquiry e: enquiries){
-            System.out.println("ID: "+ e.id + " Subject: " + e.subject + " Description: " + e.description);
-        }
         return enquiries;
     }
 
-    public Enquiry viewEnquirybyId(String id){
-        Enquiry e = DB_Enquiry.readEnquiry(id);
-        System.out.println("ID: "+ e.id + " Subject: " + e.subject + " Description: " + e.description);
-        return e;
+    public ArrayList<Enquiry> viewEnquirybyId(String id){
+        // Enquiry e = DB_Enquiry.readEnquiry(id);
+        ArrayList<Enquiry> Enquirys = new ArrayList<>();
+		ArrayList<Enquiry> Enquiryss = DB_Enquiry.getAllEnquiries();
+
+		for(Enquiry ss: Enquiryss){
+			if(id.equals(ss.getId())){
+				Enquirys.add(ss);
+			}
+		}
+		
+        return Enquirys;
     }
     public void editEnquiry(Enquiry e, Enquiry newE){
         DB_Enquiry.updateEnquiry(newE);

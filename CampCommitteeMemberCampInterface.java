@@ -2,6 +2,6 @@ public interface CampCommitteeMemberCampInterface {
 
 	void registerForCampAsCampCommittee(Camp camp);
 
-	String getCampDetails();
+	Camp getCampDetails(String campId);
 
 }

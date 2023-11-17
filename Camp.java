@@ -70,83 +70,53 @@ public class Camp {
 		return this.description;
 	}
 
-	/**
-	 * 
-	 * @param id
-	 */
+	
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/**
-	 * 
-	 * @param name
-	 */
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * 
-	 * @param isVisible
-	 */
+
 	public void setIsVisible(boolean isVisible) {
 		this.isVisible = isVisible;
 	}
 
-	/**
-	 * 
-	 * @param startDate
-	 */
+
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	/**
-	 * 
-	 * @param endDate
-	 */
+
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
-	/**
-	 * 
-	 * @param regClosingDate
-	 */
+
 	public void setRegClosingDate(String regClosingDate) {
 		this.regClosingDate = regClosingDate;
 	}
 
 
-	/**
-	 * 
-	 * @param location
-	 */
+
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
-	/**
-	 * 
-	 * @param totalSlots
-	 */
+
 	public void setTotalSlots(int totalSlots) {
 		this.totalSlots = totalSlots;
 	}
 
-	/**
-	 * 
-	 * @param campCommitteeSlots
-	 */
+
 	public void setCampCommitteeSlots(int campCommitteeSlots) {
 		this.campCommitteeSlots = campCommitteeSlots;
 	}
 
-	/**
-	 * 
-	 * @param description
-	 */
+
 	public void setDescription(String description) {
 		this.description = description;
 	}

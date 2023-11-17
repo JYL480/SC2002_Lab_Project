@@ -7,7 +7,6 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         super(id, password, name, email);
     }
 
-    @Override
     public ArrayList<Object[]> viewAllAttendeesEnquiriesByCampId(String campId) {
         ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
         ArrayList<Object[]> enquiryAttendeeArrays = new ArrayList<>();
@@ -22,38 +21,56 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         // Implement logic to view all attendee enquiries for a specific camp
         return enquiryAttendeeArrays;
     }
+    
 
-    @Override
+  
     public void replyToAttendeeEnquiry(Enquiry enquiry) {
         // Implement logic to reply to an attendee enquiry
         DB_Enquiry.updateEnquiry(enquiry);
     }
 
-    @Override
+    
     public ArrayList<Suggestion> viewCommiteeMembersSuggestionsByCampId(String campId) {
         // Implement logic to view committee members' suggestions for a specific camp
-        return new ArrayList<>();
+        ArrayList<String> suggestionIds = new ArrayList<>();
+        ArrayList<Suggestion> suggestions = new ArrayList<>();
+        ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
+        for(String ccmId: ccmIds){
+            suggestionIds = DB_CCMIdToSuggestionId.getSuggestionIds(ccmId);
+        }
+        for(String s: suggestionIds){
+            Suggestion suggestion = DB_Suggestion.readSuggestion(s);
+            suggestions.add(suggestion);
+        }
+        
+        return suggestions;
+
     }
 
-    @Override
+   
     public String givePerformanceReview(Performance performance, CampCommitteeMember campCommitteeMember) {
         // Implement logic to give performance review to a camp committee member
+        DB_CCMIdToPerformanceId.createMapping(campCommitteeMember.getId(), performance.getId());
+        // DB_Performance.updatePerformance(performance);
         return "Performance review given";
     }
 
-    @Override
+
     public String editPerformanceReview(Performance performance) {
         // Implement logic to edit performance review of a camp committee member
+        DB_Performance.updatePerformance(performance);
         return "Performance review edited";
     }
 
-    @Override
+    
     public String deletePerformanceReview(String performanceId, CampCommitteeMember CCMId) {
         // Implement logic to delete performance review of a camp committee member
+        DB_CCMIdToPerformanceId.deleteMapping(CCMId.getId(), performanceId);
+        DB_Performance.deletePerformance(performanceId);
         return "Performance review deleted";
     }
 
-    @Override
+    
     public void createCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
         // Implement logic to create a camp
         DB_Camp.createCamp(camp);
@@ -65,7 +82,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         
     }
 
-    @Override
+    
     public void deleteCamp(String campId) {
         // Implement logic to delete a camp
         DB_Camp.deleteCamp(campId);
@@ -76,7 +93,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         DB_CampIdToFacultyId.deleteMappingsByCampId(campId);
     }
 
-    @Override
+    
     public ArrayList<Object[]> viewAllCamps() {
         ArrayList<Camp> camps = DB_Camp.getAllCamps();
         ArrayList<Object[]> campStaffArrays = new ArrayList<>();
@@ -84,11 +101,12 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
             String staffId = DB_StaffIdToCampId.getStaffId(c.getId());
             Staff staff = DB_Staff.readStaff(staffId);
             campStaffArrays.add(new Object[]{c, staff});
+           
         }
         return campStaffArrays;
     }
 
-    @Override
+   
     public ArrayList<Camp> viewSelfCreatedCamps() {
         // Implement logic to view camps created by the staff
         ArrayList<String> campIds = DB_StaffIdToCampId.getCampIds(this.getId());
@@ -101,13 +119,13 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         return camps;
     }
 
-    @Override
+  
     public void editCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
         // Implement logic to edit a camp
         DB_Camp.updateCamp(camp);
     }
 
-    @Override
+    
     public void generateReportOfStudentsAttendingSelfCreatedCamp(Camp camp) {
         // Implement logic to generate a report of students attending a self-created camp
     }
@@ -115,7 +133,11 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     @Override
     public void generatePerformanceReportOfCampCommitteeMembers(Camp camp) {
         // Implement logic to generate a performance report of camp committee members for a specific camp
+        
+    
     }
+
+    // 
 
     // public static void main(String[] args)
     // {

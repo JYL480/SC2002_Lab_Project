@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+// import org.jcp.xml.dsig.internal.SignerOutputStream;
+
 public class CampCommitteeMember extends Student implements CampCommitteeMemberStaffInterface, CampCommitteeMemberAttendeeInterface, CampCommitteeMemberCampInterface {
 
 	private int points;
@@ -27,25 +29,34 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	public ArrayList<Suggestion> viewAllSuggestions() {
 		// Implement logic to view all suggestions
 		ArrayList<Suggestion> suggestions = DB_Suggestion.getAllSuggestions();
-        for(Suggestion s: suggestions){
-            System.out.println("ID: "+ s.getId() + " Sugestion String: " + s.getSuggestionStr() + " Processed: " + s.getIsProcessed());
-        }
         return suggestions;
 	}
 
 	
-	public Suggestion viewSuggestionById(String suggestionID) {
+	public ArrayList<Suggestion> viewSuggestionById(String suggestionID) {
 		// Implement logic to view a suggestion by ID
-		Suggestion s =DB_Suggestion.readSuggestion(suggestionID);
-		System.out.println("ID: "+ s.getId() + " Sugestion String: " + s.getSuggestionStr() + " Processed: " + s.getIsProcessed());
-		return s;
+		// Suggestion s =DB_Suggestion.readSuggestion(suggestionID);
+		ArrayList<Suggestion> suggestions = new ArrayList<>();
+		ArrayList<Suggestion> suggestionss = DB_Suggestion.getAllSuggestions();
+
+		for(Suggestion ss: suggestionss){
+			if(suggestionID.equals(ss.getId())){
+				suggestions.add(ss);
+			}
+		}
+
+		
+		return suggestions;
 	}
 
 	
 	public void editSuggestionById(String text, Suggestion suggestion) {
 		// Implement logic to edit a suggestion by ID
-		Suggestion newS = new Suggestion(suggestion.getId(),false, text);	
-		DB_Suggestion.updateSuggestion(newS);
+		if(!suggestion.getIsProcessed()){
+			Suggestion newS = new Suggestion(suggestion.getId(),false, text);	
+			DB_Suggestion.updateSuggestion(newS);
+		}
+
 	}
 
 	
@@ -59,17 +70,17 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	public ArrayList<Enquiry> viewAllAttendeeEnquiries() {
 		// Implement logic to view all attendee enquiries
 		ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
-		for(Enquiry e: enquiries){
-			System.out.println("ID: "+ e.id + " Subject: " + e.subject + " Description: " + e.description);
-		}
 		return enquiries;
 	}
 
-	
+	// have issue in testing
 	public void replyToAttendeeEnquiry(Enquiry e, String text, Attendee a) {
 		// Implement logic to reply to an attendee enquiry
 		if(!e.getIsProcessed()){
+			System.out.println("elkar");
 			e.setReplyText(text);
+			System.out.println(text);
+			System.out.println(e.getReplyText());
 			e.setRepliedByName(this.getName());
 			e.setRepliedByStaff(true);
 			e.setProcessed(true);
@@ -86,9 +97,10 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	}
 
 	
-	public String getCampDetails() {
+	public Camp getCampDetails(String campId) {
 		// Implement logic to get camp details
-		DB_Camp.readCamp();
-		//jalskdjls
+		Camp camp = DB_Camp.readCamp(campId);
+		return camp;
+	
 	}
 }
