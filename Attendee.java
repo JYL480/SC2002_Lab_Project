@@ -10,25 +10,32 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
 // Implementation of AttendeeEnquiryInterface
     public void submitEnquiry(Enquiry e){
         // this.equiryIdToEnquiyObjMap.put(e.getId(), e);
+        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
+        DB_Enquiry.createEnquiry(e);
     }
     public ArrayList<Enquiry> viewAllEnquires(){
-        return null;
-        // return new ArrayList<Enquiry>(this.equiryIdToEnquiyObjMap.values());
+        ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
+        for(Enquiry e: enquiries){
+            System.out.println("ID: "+ e.id + " Subject: " + e.subject + " Description: " + e.description);
+        }
+        return enquiries;
     }
+
     public Enquiry viewEnquirybyId(String id){
-        return null;
-        // return this.equiryIdToEnquiyObjMap.get(id);
+        return DB_Enquiry.readEnquiry(id);
+        
     }
     public void editEnquiry(Enquiry e, Enquiry newE){
-        
-        // this.equiryIdToEnquiyObjMap.remove(e.getId());
-        // this.equiryIdToEnquiyObjMap.put(e.getId(), newE);
+        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
+        DB_Enquiry.updateEnquiry(newE);
     }
     public void deleteEnquiry(Enquiry e){
-        // this.equiryIdToEnquiyObjMap.remove(e.getId());
+        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
+        DB_Enquiry.deleteEnquiry(e.getId());
     }
 // Implementation of AttendeeCampInterface
     public void registerForCampAsAttendee(Camp camp){
-        // this.campIdToCampObjMap.put(camp.getId(), camp);
+        DB_AttendeeIdToCampId.createMapping(this.getId(), camp.getId());
+        
     }
 }
