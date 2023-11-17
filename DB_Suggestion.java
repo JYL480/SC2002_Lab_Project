@@ -143,6 +143,7 @@ public class DB_Suggestion {
         // Suggestion not found
     }
 
+    
     public static ArrayList<Suggestion> getAllSuggestions() {
         ArrayList<Suggestion> suggestions = new ArrayList<>();
 

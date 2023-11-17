@@ -34,42 +34,26 @@ public class Performance {
 		return this.isProcessed;
 	}
 
-	/**
-	 * 
-	 * @param id
-	 */
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/**
-	 * 
-	 * @param rating
-	 */
+
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
 
-	/**
-	 * 
-	 * @param areasDoneWell
-	 */
+
 	public void setAreasDoneWell(String areasDoneWell) {
 		this.areasDoneWell = areasDoneWell;
 	}
 
-	/**
-	 * 
-	 * @param areasToImprove
-	 */
 	public void setAreasToImprove(String areasToImprove) {
 		this.areasToImprove = areasToImprove;
 	}
 
-	/**
-	 * 
-	 * @param isProcessed
-	 */
+
 	public void setIsProcessed(boolean isProcessed) {
 		this.isProcessed = isProcessed;
 	}
