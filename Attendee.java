@@ -22,20 +22,21 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
     }
 
     public Enquiry viewEnquirybyId(String id){
-        return DB_Enquiry.readEnquiry(id);
-        
+        Enquiry e = DB_Enquiry.readEnquiry(id);
+        System.out.println("ID: "+ e.id + " Subject: " + e.subject + " Description: " + e.description);
+        return e;
     }
     public void editEnquiry(Enquiry e, Enquiry newE){
-        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
         DB_Enquiry.updateEnquiry(newE);
     }
     public void deleteEnquiry(Enquiry e){
-        DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
+        DB_AttendeeIdToEnquiryId.deleteMapping(getId(), e.getId());
         DB_Enquiry.deleteEnquiry(e.getId());
     }
 // Implementation of AttendeeCampInterface
     public void registerForCampAsAttendee(Camp camp){
-        DB_AttendeeIdToCampId.createMapping(this.getId(), camp.getId());
-        
+        if(!DB_AttendeeIdToCampId.isExists(getId(), camp.getId())){
+            DB_AttendeeIdToCampId.createMapping(this.getId(), camp.getId());
+        }
     }
 }
