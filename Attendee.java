@@ -13,8 +13,14 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
         DB_AttendeeIdToEnquiryId.createMapping(getId(), e.getId());
         DB_Enquiry.createEnquiry(e);
     }
-    public ArrayList<Enquiry> viewAllEnquires(){
-        ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
+    public ArrayList<Enquiry> viewAllEnquires()
+    {
+        ArrayList<String> enquiryIds = getEnquiryIds(this.id);
+        ArrayList<Enquiry> enquiries = new ArrayList<>();
+        for(String eId: enquiryIds)
+        {
+            enquiries.add(DB_Enquiry.readEnquiry(eId));
+        }
         return enquiries;
     }
 
