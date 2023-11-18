@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class Suggestion {
 
 	private String id;
@@ -6,9 +8,9 @@ public class Suggestion {
 	private String campId;
 	private String newCampname;
 	private boolean newCampisVisible;
-	private String newCampStartDate;
-	private String newCampEndDate;
-	private String newRegClosingDate;
+	private LocalDate newCampStartDate;
+	private LocalDate newCampEndDate;
+	private LocalDate newRegClosingDate;
 	private String newLocation;
 	private int newTotalSlots;
 	private int newCampCommitteeSlots;
@@ -23,9 +25,9 @@ public class Suggestion {
 		this.campId = "";
 		this.newCampname = "";
 		this.newCampisVisible = false;
-		this.newCampStartDate = "";
-		this.newCampEndDate = "";
-		this.newRegClosingDate = "";
+		this.newCampStartDate = LocalDate.now();
+		this.newCampEndDate = LocalDate.now();
+		this.newRegClosingDate = LocalDate.now();
 		this.newLocation = "";
 		this.newTotalSlots = 0;  // Set a default value for int fields
 		this.newCampCommitteeSlots = 0;  // Set a default value for int fields
@@ -33,8 +35,8 @@ public class Suggestion {
 	}
 
 	public Suggestion(String id, boolean isProcessed, boolean isApproved, String campId,
-					String newCampName, boolean newCampisVisible, String newCampStartDate,
-					String newCampEndDate, String newRegClosingDate, String newLocation,
+					String newCampName, boolean newCampisVisible, LocalDate newCampStartDate,
+					LocalDate newCampEndDate, LocalDate newRegClosingDate, String newLocation,
 					int newTotalSlots, int newCampCommitteeSlots, String newDescription) {
 		this.id = id;
 		this.isProcessed = isProcessed;
@@ -105,27 +107,27 @@ public class Suggestion {
         this.newCampisVisible = newCampisVisible;
     }
 
-    public String getNewCampStartDate() {
+    public LocalDate getNewCampStartDate() {
         return this.newCampStartDate;
     }
 
-    public void setNewCampStartDate(String newCampStartDate) {
+    public void setNewCampStartDate(LocalDate newCampStartDate) {
         this.newCampStartDate = newCampStartDate;
     }
 
-    public String getNewCampEndDate() {
+    public LocalDate getNewCampEndDate() {
         return this.newCampEndDate;
     }
 
-    public void setNewCampendDate(String newCampEndDate) {
+    public void setNewCampendDate(LocalDate newCampEndDate) {
         this.newCampEndDate = newCampEndDate;
     }
 
-    public String getNewRegClosingDate() {
+    public LocalDate getNewRegClosingDate() {
         return this.newRegClosingDate;
     }
 
-    public void setNewRegClosingDate(String newRegClosingDate) {
+    public void setNewRegClosingDate(LocalDate newRegClosingDate) {
         this.newRegClosingDate = newRegClosingDate;
     }
 

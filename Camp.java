@@ -1,21 +1,22 @@
 // import java.util.ArrayList;
 // import java.time.String;
+import java.time.LocalDate;
 
 public class Camp {
 
 	private String id;
 	private String name;
 	private boolean isVisible;
-	private String startDate;
-	private String endDate;
-	private String regClosingDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private LocalDate regClosingDate;
 	private String location;
 	private int totalSlots;
 	private int campCommitteeSlots;
 	private String description;
 
-	public Camp(String id, String name, boolean isVisible, String startDate, 
-	String endDate, String regClosingDate, String location, 
+	public Camp(String id, String name, boolean isVisible, LocalDate startDate, 
+	LocalDate endDate, LocalDate regClosingDate, String location, 
 	int totalSlots, int campCommitteeSlots, String description){
 		this.id = id;
 		this.name = name;
@@ -42,15 +43,15 @@ public class Camp {
 		return this.isVisible;
 	}
 
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return this.startDate;
 	}
 
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return this.endDate;
 	}
 
-	public String getRegClosingDate() {
+	public LocalDate getRegClosingDate() {
 		return this.regClosingDate;
 	}
 
@@ -86,17 +87,17 @@ public class Camp {
 	}
 
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
 
-	public void setRegClosingDate(String regClosingDate) {
+	public void setRegClosingDate(LocalDate regClosingDate) {
 		this.regClosingDate = regClosingDate;
 	}
 

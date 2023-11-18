@@ -3,6 +3,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.time.LocalDate;
+
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,8 +13,6 @@ public class DB_Camp {
     private static final String FILE_PATH = DatabaseFilePaths.CAMP;
 
     public static void createCamp(Camp camp) {
-        System.out.println("create camp being called");
-        System.out.println(FILE_PATH);
         try (FileInputStream file = new FileInputStream(FILE_PATH);
              Workbook workbook = new XSSFWorkbook(file)) {
 
@@ -90,7 +90,7 @@ public class DB_Camp {
                     int campCommitteeSlots = (int) row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
                     String description = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
-                    return new Camp(id, name, isVisible, startDate, endDate, regClosingDate, location, totalSlots, campCommitteeSlots, description);
+                    return new Camp(id, name, isVisible, LocalDate.parse(startDate), LocalDate.parse(endDate), LocalDate.parse(regClosingDate), location, totalSlots, campCommitteeSlots, description);
                 }
             }
 
@@ -210,7 +210,7 @@ public class DB_Camp {
                 int campCommitteeSlots = (int) row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
                 String description = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
-                camps.add(new Camp(id, name, isVisible, startDate, endDate, regClosingDate, location, totalSlots, campCommitteeSlots, description));
+                camps.add(new Camp(id, name, isVisible, LocalDate.parse(startDate), LocalDate.parse(endDate), LocalDate.parse(regClosingDate), location, totalSlots, campCommitteeSlots, description));
             }
 
         } catch (IOException e) {
@@ -221,41 +221,41 @@ public class DB_Camp {
     }
 
 
-    // public static void main(String[] args) {
-    //     // Test createCamp
-    //     Camp one = new Camp(RandomIdGenerator.generateRandomId(), "Fourth Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
-    //     Camp two = new Camp(RandomIdGenerator.generateRandomId(), "Fifth Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
-    //     Camp three = new Camp(RandomIdGenerator.generateRandomId(), "Sizth Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
+    public static void main(String[] args) {
+        // Test createCamp
+        Camp one = new Camp(RandomIdGenerator.generateRandomId(), "Fourth Camp", true, LocalDate.now(), LocalDate.now(), LocalDate.now(), "Camp Location", 100, 10, "Camp Description");
+        ////Camp two = new Camp(RandomIdGenerator.generateRandomId(), "Fifth Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
+        // Camp three = new Camp(RandomIdGenerator.generateRandomId(), "Sizth Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
 
-    //     DB_Camp.createCamp(one);
-    //     DB_Camp.createCamp(two);
-    //     DB_Camp.createCamp(three);
+        // DB_Camp.createCamp(one);
+        // DB_Camp.createCamp(two);
+        // DB_Camp.createCamp(three);
 
 
-    //     // Test getCamp
-    //     //Camp retrievedCamp = DB_Camp.readCamp(newCamp.getId());
-    //     //System.out.println("Retrieved Camp: " + retrievedCamp.getName());
+        // Test getCamp
+        Camp retrievedCamp = DB_Camp.readCamp("1b0327bbb247495a9d93274533ff97e2");
+        System.out.println("Retrieved Camp: " + retrievedCamp.getRegClosingDate());
 
-    //     // Test updateCamp
-    //     //Camp updatedCamp = new Camp(newCamp.getId(), "Autum Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
-    //     //DB_Camp.updateCamp(updatedCamp);
+        // Test updateCamp
+        //Camp updatedCamp = new Camp(newCamp.getId(), "Autum Camp", true, "2023-07-01", "2023-07-15", "2023-06-15", "Camp Location", 100, 10, "Camp Description");
+        //DB_Camp.updateCamp(updatedCamp);
 
-    //     // Test getCamps
-    //     System.out.println("All Camps:");
-    //     ArrayList<Camp> allCamps = DB_Camp.getAllCamps();
-    //     for (Camp camp : allCamps) {
-    //         System.out.println(camp.getName());
-    //     }
+        // Test getCamps
+        // System.out.println("All Camps:");
+        // ArrayList<Camp> allCamps = DB_Camp.getAllCamps();
+        // for (Camp camp : allCamps) {
+        //     System.out.println(camp.getName());
+        // }
 
-    //     // Test deleteCamp
+        // // Test deleteCamp
         
-    //     DB_Camp.deleteCamp("2a8c460240864430a286df9dfca1c883");
+        // DB_Camp.deleteCamp("2a8c460240864430a286df9dfca1c883");
 
-    //     //Test getCamps after deletion
-    //     System.out.println("\nAll Camps after Deletion:");
-    //     ArrayList<Camp> campsAfterDeletion = DB_Camp.getAllCamps();
-    //     for (Camp camp : campsAfterDeletion) {
-    //         System.out.println(camp.getName());
-    //     }
-    // }
+        // //Test getCamps after deletion
+        // System.out.println("\nAll Camps after Deletion:");
+        // ArrayList<Camp> campsAfterDeletion = DB_Camp.getAllCamps();
+        // for (Camp camp : campsAfterDeletion) {
+        //     System.out.println(camp.getName());
+        // }
+    }
 }

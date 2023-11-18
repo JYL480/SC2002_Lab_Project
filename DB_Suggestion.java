@@ -3,7 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.time.LocalDate;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -42,13 +42,13 @@ public class DB_Suggestion {
             newCampIsVisibleCell.setCellValue(suggestion.isNewCampisVisible());
 
             Cell newCampStartDateCell = newRow.createCell(6);
-            newCampStartDateCell.setCellValue(suggestion.getNewCampStartDate());
+            newCampStartDateCell.setCellValue(suggestion.getNewCampStartDate().toString());
 
             Cell newCampEndDateCell = newRow.createCell(7);
-            newCampEndDateCell.setCellValue(suggestion.getNewCampEndDate());
+            newCampEndDateCell.setCellValue(suggestion.getNewCampEndDate().toString());
 
             Cell newRegClosingDateCell = newRow.createCell(8);
-            newRegClosingDateCell.setCellValue(suggestion.getNewRegClosingDate());
+            newRegClosingDateCell.setCellValue(suggestion.getNewRegClosingDate().toString());
 
             Cell newLocationCell = newRow.createCell(9);
             newLocationCell.setCellValue(suggestion.getNewLocation());
@@ -99,7 +99,7 @@ public class DB_Suggestion {
                     String newDescription = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
                     return new Suggestion(suggestionId, isProcessed, isApproved, campId, newCampName, newCampIsVisible,
-                            newCampStartDate, newCampEndDate, newRegClosingDate, newLocation, newTotalSlots,
+                            LocalDate.parse(newCampStartDate), LocalDate.parse(newCampEndDate), LocalDate.parse(newRegClosingDate), newLocation, newTotalSlots,
                             newCampCommitteeSlots, newDescription);
                 }
             }
@@ -129,9 +129,9 @@ public class DB_Suggestion {
                     row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getCampId());
                     row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampname());
                     row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.isNewCampisVisible());
-                    row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampStartDate());
-                    row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampEndDate());
-                    row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewRegClosingDate());
+                    row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampStartDate().toString());
+                    row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampEndDate().toString());
+                    row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewRegClosingDate().toString());
                     row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewLocation());
                     row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewTotalSlots());
                     row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampCommitteeSlots());
@@ -226,7 +226,7 @@ public class DB_Suggestion {
                 String newDescription = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
                 suggestions.add(new Suggestion(id, isProcessed, isApproved, campId, newCampName, newCampIsVisible,
-                        newCampStartDate, newCampEndDate, newRegClosingDate, newLocation, newTotalSlots,
+                        LocalDate.parse(newCampStartDate), LocalDate.parse(newCampEndDate), LocalDate.parse(newRegClosingDate), newLocation, newTotalSlots,
                         newCampCommitteeSlots, newDescription));
             }
 
