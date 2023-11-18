@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileOutputStream;
 
+/*
+Might need a rewrite! if attendee table shows that it is alos a CCM, you need to retreive from CCM databaes shit like CCM points
+
+*/
 
 public class LoginManager {
 

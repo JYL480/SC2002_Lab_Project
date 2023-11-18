@@ -18,35 +18,69 @@ public class Student extends User implements StudentCampInterface {
         this.isCampCommittee = isCampCommittee;
     }
 
-    public ArrayList<Camp> viewListOfCamps() {
-        ArrayList<Camp> listOfCamps = new ArrayList<>();
-        listOfCamps = DB_Camp.getAllCamps();
+    public ArrayList<Camp> viewListOfAvailCamps()
+    {
+        //Get camps that are avaible to studen'ts faculty
+        ArrayList<String> attendeeFacultyIds = DB_AttendeeIdToFacultyId.getFacultyIds(this.getId());
+        ArrayList<String> campIds = new ArrayList<> ();
+        ArrayList<Camp> camps = new ArrayList<> ();
+        for(String id: attendeeFacultyIds)
+        {      
+            campIds.addAll(DB_CampIdToFacultyId.getCampIds(id));     
+        }
 
-        // ArrayList<Camp> visibleAndFacultyCamps = new ArrayList<>();
+        for(String id: campIds)
+        {
+            Camp tmpCamp = DB_Camp.readCamp(id);
+             // See if the visibilty is toggled on
+            if(tmpCamp.getIsVisible())
+            {
+                camps.add(tmpCamp);
+            }
+        }
 
-        
-        
-        // for(Camp li: listOfCamps) {
-        //     if(li.getIsVisible() == false) {
-                
-        //     }
-        // }
-
-        // THIS PART IS NOT DONE for the faculty part
-    
-        // if(listOfCamps.)
-        
-        return listOfCamps;
+        return camps; 
     }
-	public int viewCampRemainingAttendeeSlots(String campId){
-        Camp camp = DB_Camp.readCamp(campId);
-        return camp.getTotalSlots();
-	}
 
-    public int viewCampRemainingCCMSlots(String campId){
+        /*
+    If the registration is succecsful, u will get back true, false otherwise. 
+    */
+    public boolean registerForCampAsAttendee(String campId)
+    {
+        //Check if the camp slot is full
         Camp camp = DB_Camp.readCamp(campId);
-        return camp.getCampCommitteeSlots();
-	}
+        if(camp.getTotalSlots() == 0 || 
+        DB_AttendeeIdToWithdrawnCampId.isExists(this.getId(),campId) || 
+        DB_AttendeeIdToCampId.isExists(this.getId(), camp.getId()))  
+        {
+            return false;
+        }
+
+        DB_AttendeeIdToCampId.createMapping(this.getId(), camp.getId());
+        camp.setTotalSlots(camp.getTotalSlots() - 1);
+        DB_Camp.updateCamp(camp);
+
+        return true;
+    }
+
+    public boolean registerForCampAsCCM(String campId)
+    {
+        int maxCCMSlot = 10;
+        Camp camp = DB_Camp.readCamp(campId);
+        if(camp.getCampCommitteeSlots() == maxCCMSlot || 
+        camp.getTotalSlots() == 0 || 
+        DB_CCMIdToCampId.isExists(this.getId(),camp.getId())
+        )
+        {
+            return false;
+        }
+
+        DB_CCMIdToCampId.createMapping(this.getId(), camp.getId());
+        camp.setTotalSlots(camp.getTotalSlots()-1);
+        camp.setCampCommitteeSlots(camp.getCampCommitteeSlots()-1);
+        DB_Camp.updateCamp(camp);
+        return true; 
+    }
 
 
 

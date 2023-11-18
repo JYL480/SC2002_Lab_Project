@@ -7,9 +7,9 @@ public interface CampCommitteeMemberStaffInterface {
 
 	public ArrayList<Suggestion> viewAllSuggestions();
 
-	public ArrayList<Suggestion> viewSuggestionById(String suggestionID);
+	public Suggestion viewSuggestionById(String suggestionID);
 
-	public void editSuggestionById(String text, Suggestion suggestion);
+	public boolean editSuggestion(Suggestion newSuggestion);
 
 	public void deleteSuggestionById(String suggestionID);
 

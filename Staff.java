@@ -38,38 +38,62 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         ArrayList<Suggestion> suggestions = new ArrayList<>();
         ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
         for(String ccmId: ccmIds){
-            suggestionIds = DB_CCMIdToSuggestionId.getSuggestionIds(ccmId);
+            suggestionIds.addAll(DB_CCMIdToSuggestionId.getSuggestionIds(ccmId));
         }
         for(String s: suggestionIds){
-            Suggestion suggestion = DB_Suggestion.readSuggestion(s);
-            suggestions.add(suggestion);
+            suggestions.add(DB_Suggestion.readSuggestion(s));
         }
         
         return suggestions;
-
     }
 
+    public void approveSuggestion(String suggestionId, boolean isApproved)
+    {
+        Suggestion suggestion = DB_Suggestion.readSuggestion(suggestionId);
+        suggestion.setIsProcessed(true);
+        suggestion.setIsApproved(isApproved);
+
+        //If is approved, give one point to ccm, if not, no points; Also change the camp details as well
+        if(isApproved)
+        {
+            String ccmId = DB_CCMIdToSuggestionId.getCCMIds(suggestionId).get(0);
+            CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
+            ccm.setPoints(ccm.getPoints()+1);
+            DB_CCM.updateCampCommitteeMember(ccm);
+            Camp newCamp = new Camp(
+                suggestion.getCampId(),
+                suggestion.getNewCampname(),
+                suggestion.isNewCampisVisible(),
+                suggestion.getNewCampStartDate(),
+                suggestion.getNewCampEndDate(),
+                suggestion.getNewRegClosingDate(),
+                suggestion.getNewLocation(),
+                suggestion.getNewTotalSlots(),
+                suggestion.getNewCampCommitteeSlots(),
+                suggestion.getNewDescription()
+            );
+            DB_Camp.updateCamp(newCamp);
+        }
+
+    }
    
-    public String givePerformanceReview(Performance performance, CampCommitteeMember campCommitteeMember) {
+    public void givePerformanceReview(Performance performance, String ccmId) {
         // Implement logic to give performance review to a camp committee member
-        DB_CCMIdToPerformanceId.createMapping(campCommitteeMember.getId(), performance.getId());
-        // DB_Performance.updatePerformance(performance);
-        return "Performance review given";
+        DB_CCMIdToPerformanceId.createMapping(ccmId, performance.getId());
+        DB_Performance.createPerformance(performance);
     }
 
 
-    public String editPerformanceReview(Performance performance) {
+    public void editPerformanceReview(Performance performance) {
         // Implement logic to edit performance review of a camp committee member
         DB_Performance.updatePerformance(performance);
-        return "Performance review edited";
     }
 
     
-    public String deletePerformanceReview(String performanceId, CampCommitteeMember CCMId) {
+    public void deletePerformanceReview(String performanceId, String ccmId) {
         // Implement logic to delete performance review of a camp committee member
-        DB_CCMIdToPerformanceId.deleteMapping(CCMId.getId(), performanceId);
+        DB_CCMIdToPerformanceId.deleteMapping(ccmId, performanceId);
         DB_Performance.deletePerformance(performanceId);
-        return "Performance review deleted";
     }
 
     
@@ -79,7 +103,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         DB_StaffIdToCampId.createMapping(this.getId(), camp.getId());
         for(Faculty f: allowedFaculty)
         {
-            DB_CampIdToFacultyId.createMapping(this.getId(), f.getId());
+            DB_CampIdToFacultyId.createMapping(camp.getId(), f.getId());
         }
         
     }
@@ -95,35 +119,55 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         DB_CampIdToFacultyId.deleteMappingsByCampId(campId);
     }
 
-    
+    //Might need to add faculty info tbh
     public ArrayList<Object[]> viewAllCamps() {
         ArrayList<Camp> camps = DB_Camp.getAllCamps();
-        ArrayList<Object[]> campStaffArrays = new ArrayList<>();
+        ArrayList<Object[]> campStaffFacultiesArrays = new ArrayList<>();
         for (Camp c : camps) {
             String staffId = DB_StaffIdToCampId.getStaffId(c.getId());
             Staff staff = DB_Staff.readStaff(staffId);
-            campStaffArrays.add(new Object[]{c, staff});  
+            ArrayList <String> facultyIds = DB_CampIdToFacultyId.getFacultyIds(c.getId());
+            ArrayList <Faculty> faculties = new ArrayList<>();
+            for(String id: facultyIds)
+            {
+                faculties.add(DB_Faculty.readFaculty(id));
+            }
+
+            campStaffFacultiesArrays.add(new Object[]{c, staff, faculties});  
         }
-        return campStaffArrays;
+        return campStaffFacultiesArrays;
     }
 
    
-    public ArrayList<Camp> viewSelfCreatedCamps() {
+    public ArrayList<Object[]> viewSelfCreatedCamps() {
         // Implement logic to view camps created by the staff
         ArrayList<String> campIds = DB_StaffIdToCampId.getCampIds(this.getId());
-        ArrayList<Camp> camps = new ArrayList<>(); 
+        ArrayList<Object[]> campFacultiesArrays = new ArrayList<>(); 
         for(String id: campIds)
         {
             Camp camp = DB_Camp.readCamp(id);
-            camps.add(camp);
+            ArrayList <String> facultyIds = DB_CampIdToFacultyId.getFacultyIds(id);
+            ArrayList <Faculty> faculties = new ArrayList<>();
+            for(String fId: facultyIds)
+            {
+                faculties.add(DB_Faculty.readFaculty(fId));
+            }
+            campFacultiesArrays.add(new Object[]{camp, faculties});
         }
-        return camps;
+        return  campFacultiesArrays;
     }
 
   
     public void editCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
         // Implement logic to edit a camp
         DB_Camp.updateCamp(camp);
+
+        //Need to check if allowed faculties need editing -- just delete the mappings n write again
+        DB_CampIdToFacultyId.deleteMappingsByCampId(camp.getId());
+        for(Faculty f: allowedFaculty)
+        {
+            DB_CampIdToFacultyId.createMapping(camp.getId(), f.getId());
+        }
     }
 
     

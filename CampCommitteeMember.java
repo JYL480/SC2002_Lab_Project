@@ -20,95 +20,101 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	public int getPoints() {
 		return this.points;
 	}
-//	implements CampCommitteeMemberStaffInterface
+
+	//	implements CampCommitteeMemberStaffInterface
 	public void submitSuggestion(Suggestion suggestion) {
-			// Implement logic to submit a suggestion
-			DB_CCMIdToSuggestionId.createMapping(getId(), suggestion.getId());
-			DB_Suggestion.createSuggestion(suggestion);
-		}
+		// Implement logic to submit a suggestion
+		DB_CCMIdToSuggestionId.createMapping(getId(), suggestion.getId());
+		DB_Suggestion.createSuggestion(suggestion);
+
+		//get a point for a suggestion
+		String ccmId = DB_CCMIdToSuggestionId.getCCMIds(suggestion.getId()).get(0);
+		CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
+		ccm.setPoints(ccm.getPoints() + 1);
+		DB_CCM.updateCampCommitteeMember(ccm);
+	}
 
 
+	// This should return a specific ccm's suggestions made
 	public ArrayList<Suggestion> viewAllSuggestions() {
 		// Implement logic to view all suggestions
-		ArrayList<Suggestion> suggestions = DB_Suggestion.getAllSuggestions();
+		ArrayList<String> suggestionIDs = DB_CCMIdToSuggestionId.getSuggestionIds(this.getId());
+		ArrayList<Suggestion> suggestions = new ArrayList<>();
+		for(String id: suggestionIDs)
+		{
+			suggestions.add(DB_Suggestion.readSuggestion(id));
+		}
         return suggestions;
 	}
 
 	
-	public ArrayList<Suggestion> viewSuggestionById(String suggestionID) {
-		// Implement logic to view a suggestion by ID
-		// Suggestion s =DB_Suggestion.readSuggestion(suggestionID);
-		ArrayList<Suggestion> suggestions = new ArrayList<>();
-		ArrayList<Suggestion> suggestionss = DB_Suggestion.getAllSuggestions();
-
-		for(Suggestion ss: suggestionss){
-			if(suggestionID.equals(ss.getId())){
-				suggestions.add(ss);
-			}
-		}
-
-		
-		return suggestions;
+	public Suggestion viewSuggestionById(String suggestionID) {
+		return DB_Suggestion.readSuggestion(suggestionID);
 	}
 
-	
-	public void editSuggestionById(String text, Suggestion suggestion) {
+	//Return true if edit Suggestion is successful
+	public boolean editSuggestion(Suggestion newSuggestion) {
 		// Implement logic to edit a suggestion by ID
-		if(!suggestion.getIsProcessed()){
-			Suggestion newS = new Suggestion(suggestion.getId(),false, text);	
-			DB_Suggestion.updateSuggestion(newS);
+		Suggestion oldSuggestion = DB_Suggestion.readSuggestion(newSuggestion.getId());
+		if(!oldSuggestion.getIsProcessed()){
+			DB_Suggestion.updateSuggestion(newSuggestion);
+			return true;
 		}
-
+		return false; 
 	}
 
 	
 	public void deleteSuggestionById(String suggestionID) {
 		// Implement logic to delete a suggestion by ID
-		DB_CCMIdToSuggestionId.deleteMapping(getId(), suggestionID);
+		DB_CCMIdToSuggestionId.deleteMapping(this.getId(), suggestionID);
 		DB_Suggestion.deleteSuggestion(suggestionID);
 	}
 
 	// implements CampCommitteeMemberAttendeeInterface
+	//This should return a specific camp's attendees' enquiries - camp that this ccm manages
 	public ArrayList<Enquiry> viewAllAttendeeEnquiries() {
 		// Implement logic to view all attendee enquiries
-		ArrayList<Enquiry> enquiries = DB_Enquiry.getAllEnquiries();
+		String campId = DB_CCMIdToCampId.getCampIds(this.getId()).get(0);
+		ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
+		ArrayList<String> enquiryIds = new ArrayList<>();
+		for(String aId: attendeeIds)
+		{
+			enquiryIds.addAll(DB_AttendeeIdToEnquiryId.getEnquiryIds(aId));
+
+		}
+		ArrayList<Enquiry> enquiries = new ArrayList<>();
+		for(String eId: enquiryIds)
+		{
+			enquiries.add(DB_Enquiry.readEnquiry(eId));
+		}
+		
 		return enquiries;
 	}
 
-	// have issue in testing
-	public void replyToAttendeeEnquiry(Enquiry e, String text, Attendee a) {
+	// have issue in testing (NOT DONE)
+	public void replyToAttendeeEnquiry(Enquiry e, String text) 
+	{
 		// Implement logic to reply to an attendee enquiry
 		if(!e.getIsProcessed()){
 			e.setReplyText(text);
 			e.setRepliedByName(this.getName());
-			e.setRepliedByStaff(true);
+			e.setRepliedByStaff(false);
 			e.setProcessed(true);
 			DB_Enquiry.updateEnquiry(e);
-		}
 		
-	}
+			//Give the CCM one point
+			this.setPoints(this.getPoints()+1);
+			DB_CCM.updateCampCommitteeMember(this);
 
-	//	implements CampCommitteeMemberCampInterface
-	public void registerForCampAsCampCommittee(Camp camp) {
-		// Implement logic to register for a camp as a camp committee member
-		if(camp.getCampCommitteeSlots() == 0){
-			System.out.println("The camp is full");
-			return;
 		}
-		if(!DB_CCMIdToCampId.isExists(getId(), camp.getId())){
-			DB_CCMIdToCampId.createMapping(getId(), camp.getId());
-			System.out.println("hehehehehehhe");
-			camp.setCampCommitteeSlots(camp.getCampCommitteeSlots() - 1);
-			DB_Camp.updateCamp(camp);
-		}		
 	}
 
-	
-	public Camp getCampDetails(String campId) {
-		// Implement logic to get camp details
-		Camp camp = DB_Camp.readCamp(campId);
-		return camp;
-	
+	// This should return specific camp - camp this ccm manages
+	public Camp getCampDetails() 
+	{
+		//Each CCM Only manages one Camp but the code returns an arraylist - just take the first element
+		String campId = DB_CCMIdToCampId.getCampIds(this.getId()).get(0);
+		return DB_Camp.readCamp(campId);
 	}
 
 	public void generateReportOfStudentsAttendingCamp(Camp camp, int filter) {

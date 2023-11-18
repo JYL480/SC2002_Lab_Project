@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+
 public interface AttendeeCampInterface {
-    public void registerForCampAsAttendee(Camp camp);
+    public void withdrawFromCampAsAttendee(String campId);
+    public ArrayList<Camp> viewRegisteredCampsAsAttendee();
 }
