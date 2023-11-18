@@ -26,14 +26,8 @@ public class DB_CCM {
             Cell idCell = newRow.createCell(0);
             idCell.setCellValue(ccm.getId());
 
-            Cell emailCell = newRow.createCell(1);
-            emailCell.setCellValue(ccm.getEmail());
-
-            Cell nameCell = newRow.createCell(2);
-            nameCell.setCellValue(ccm.getName());
-
-            Cell passwordCell = newRow.createCell(3);
-            passwordCell.setCellValue(ccm.getPassword());
+            Cell pointsCell = newRow.createCell(1);
+            pointsCell.setCellValue(ccm.getPoints());
 
             // Save the changes to the file
             try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
@@ -58,11 +52,14 @@ public class DB_CCM {
 
                 if (ccmId.equals(id)) {
                     // Found the CampCommitteeMember
-                    String email = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String name = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String password = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                    return new CampCommitteeMember(id, password, name, email, true, 0); // Assuming isCampCommittee and points are fixed values
+                    int points = (int) row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
+                    Attendee attendee = DB_Attendee.readAttendee(ccmId);
+                    return new CampCommitteeMember(id, 
+                                                    attendee.getPassword(),
+                                                    attendee.getName(),
+                                                    attendee.getEmail(), 
+                                                    attendee.getIsCampCommittee(), 
+                                                    points); 
                 }
             }
 
@@ -86,9 +83,7 @@ public class DB_CCM {
 
                 if (ccm.getId().equals(id)) {
                     // Update the CampCommitteeMember data in the row
-                    row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(ccm.getEmail());
-                    row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(ccm.getName());
-                    row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(ccm.getPassword());
+                    row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(ccm.getPoints());
 
                     // Save the changes to the file
                     try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
@@ -108,7 +103,7 @@ public class DB_CCM {
 
     public static void deleteCampCommitteeMember(String ccmId) {
         try (FileInputStream file = new FileInputStream(FILE_PATH);
-            Workbook workbook = new XSSFWorkbook(file)) {
+             Workbook workbook = new XSSFWorkbook(file)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
 
@@ -164,11 +159,16 @@ public class DB_CCM {
                     continue;
                 }
                 String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String email = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String name = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String password = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                int points = (int) row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
 
-                campCommitteeMembers.add(new CampCommitteeMember(id, password, name, email, true, 0)); // Assuming isCampCommittee and points are fixed values
+                Attendee attendee = DB_Attendee.readAttendee(id);
+                campCommitteeMembers.add(new CampCommitteeMember(
+                    id, 
+                     attendee.getPassword(),
+                     attendee.getName(),
+                     attendee.getEmail(), 
+                      attendee.getIsCampCommittee(), 
+                    points)); 
             }
 
         } catch (IOException e) {
@@ -180,42 +180,25 @@ public class DB_CCM {
 
     // public static void main(String[] args) {
     //     // Test createCampCommitteeMember
-    //     CampCommitteeMember newCCM = new CampCommitteeMember("CCM1", "password123", "John Doe", "john@example.com", true, 0);
-    //     CampCommitteeMember newCCM2 = new CampCommitteeMember("CCM2", "password123", "Jane Doe", "john@example.com", true, 0);
+    //     CampCommitteeMember newCCM = new CampCommitteeMember("CCM1", 0);
+    //     CampCommitteeMember newCCM2 = new CampCommitteeMember("CCM2", 0);
     //     DB_CCM.createCampCommitteeMember(newCCM);
     //     DB_CCM.createCampCommitteeMember(newCCM2);
 
     //     // Test readCampCommitteeMember
     //     CampCommitteeMember retrievedCCM = DB_CCM.readCampCommitteeMember("CCM1");
     //     if (retrievedCCM != null) {
-    //         System.out.println("Retrieved CampCommitteeMember: " + retrievedCCM.getName());
+    //         System.out.println("Retrieved CampCommitteeMember: " + retrievedCCM.getId());
     //     } else {
     //         System.out.println("CampCommitteeMember not found.");
     //     }
 
     //     // Test updateCampCommitteeMember
     //     if (retrievedCCM != null) {
-    //         retrievedCCM.setEmail("newemail@example.com");
+    //         retrievedCCM.setPoints(100);
     //         DB_CCM.updateCampCommitteeMember(retrievedCCM);
     //         System.out.println("CampCommitteeMember updated.");
     //     }
 
-    //     // Test getAllCampCommitteeMembers
-    //     System.out.println("\nAll CampCommitteeMembers:");
-    //     ArrayList<CampCommitteeMember> allCCMs = DB_CCM.getAllCampCommitteeMembers();
-    //     for (CampCommitteeMember ccm : allCCMs) {
-    //         System.out.println(ccm.getName());
-    //     }
-
-    //     // Test deleteCampCommitteeMember
-    //     DB_CCM.deleteCampCommitteeMember("CCM1");
-    //     System.out.println("\nCampCommitteeMember deleted.");
-
-    //     // Test getAllCampCommitteeMembers after deletion
-    //     System.out.println("\nAll CampCommitteeMembers after Deletion:");
-    //     ArrayList<CampCommitteeMember> ccmAfterDeletion = DB_CCM.getAllCampCommitteeMembers();
-    //     for (CampCommitteeMember ccm : ccmAfterDeletion) {
-    //         System.out.println(ccm.getName());
-    //     }
-    // }
+    //    
 }
