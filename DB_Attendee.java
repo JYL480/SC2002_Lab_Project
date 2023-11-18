@@ -77,6 +77,38 @@ public class DB_Attendee {
         return null; // Attendee not found
     }
 
+    public static Attendee readAttendeeByEmail(String attendeeEmail) {
+        try (FileInputStream file = new FileInputStream(FILE_PATH);
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+
+            Iterator<Row> iterator = sheet.iterator();
+            while (iterator.hasNext()) {
+                Row row = iterator.next();
+                String email = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+
+                if (attendeeEmail.equals(email)) {
+                    // Found the attendee
+                    String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    String name = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    String password = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    boolean isCampCommittee = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+
+                    return new Attendee(id, password, name, email, isCampCommittee);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+
+        return null; // Attendee not found
+    }
+
+
+
+
     public static void updateAttendee(Attendee attendee) {
         try (FileInputStream file = new FileInputStream(FILE_PATH);
              Workbook workbook = new XSSFWorkbook(file)) {

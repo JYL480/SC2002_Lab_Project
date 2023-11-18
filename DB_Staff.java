@@ -73,6 +73,35 @@ public class DB_Staff {
         return null; // Staff not found
     }
 
+    
+    public static Staff readStaffByEmail(String staffEmail) {
+        try (FileInputStream file = new FileInputStream(DatabaseFilePaths.STAFF);
+            Workbook workbook = new XSSFWorkbook(file)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+
+            Iterator<Row> iterator = sheet.iterator();
+            while (iterator.hasNext()) {
+                Row row = iterator.next();
+                String email = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+
+                if (staffEmail.equals(email)) {
+                    // Found the staff
+                    String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    String name = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                    String password = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+
+                    return new Staff(id, password, name, email);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Handle the exception according to your needs
+        }
+
+        return null; // Staff not found
+    }
+
     public static void updateStaff(Staff staff) {
         try (FileInputStream file = new FileInputStream(FILE_PATH);
              Workbook workbook = new XSSFWorkbook(file)) {
