@@ -307,4 +307,9 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         }
     }
 
+    public void changePassword(String newPassword) {
+        this.setPassword(newPassword);
+        DB_Staff.updateStaff(this);
+    }
+
 }

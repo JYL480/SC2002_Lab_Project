@@ -120,6 +120,11 @@ public class Student extends User implements StudentCampInterface {
         return true; 
     }
 
+    public void changePassword(String newPassword) {
+        this.setPassword(newPassword);
+        Attendee attendee = (Attendee) this;
+        DB_Attendee.updateAttendee(attendee);
+    }
 
 
 
