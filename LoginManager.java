@@ -5,7 +5,10 @@ public class LoginManager {
             Student student = DB_Student.readStudentByEmail(email);
             if (student != null && student.getPassword().equals(password)) {
                 if (CommandLineApp.LoggedInUserType == UserType.ATTENDEE) CommandLineApp.LoggedInUser = student;
-                else CommandLineApp.LoggedInUser = new CampCommitteeMember(student, DB_CCMIdToPoints.getPoints(student.getId()));
+                else {
+                    if (student.getIsCampCommittee()) CommandLineApp.LoggedInUser = new CampCommitteeMember(student, DB_CCMIdToPoints.getPoints(student.getId()));
+                    else return false;
+                }
                 return true;
             } else {
                 return false;
