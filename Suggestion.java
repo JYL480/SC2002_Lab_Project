@@ -1,29 +1,18 @@
-import java.time.LocalDate;
-
 public class Suggestion {
 
 	private String id;
 	private boolean isProcessed;
 	private boolean isApproved;
 	private String campId;
-	private String newCampname;
-	private boolean newCampisVisible;
-	private LocalDate newCampStartDate;
-	private LocalDate newCampEndDate;
-	private LocalDate newRegClosingDate;
-	private String newLocation;
-	private int newTotalSlots;
-	private int newCampCommitteeSlots;
-	private String newDescription;
-	private boolean newIsOpenToAll;
+	private String comment;
 
 
-	public boolean getNewIsOpenToAll() {
-		return newIsOpenToAll;
+	public String getComment() {
+		return comment;
 	}
 
-	public void setNewIsOpenToAll(boolean newIsOpenToAll) {
-		this.newIsOpenToAll = newIsOpenToAll;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public Suggestion() {
@@ -32,36 +21,16 @@ public class Suggestion {
 		this.isApproved = false;
 		// Initialize other fields with default values if needed
 		this.campId = "";
-		this.newCampname = "";
-		this.newCampisVisible = false;
-		this.newCampStartDate = LocalDate.now();
-		this.newCampEndDate = LocalDate.now();
-		this.newRegClosingDate = LocalDate.now();
-		this.newLocation = "";
-		this.newTotalSlots = 0;  // Set a default value for int fields
-		this.newCampCommitteeSlots = 0;  // Set a default value for int fields
-		this.newDescription = "";
-		this.newIsOpenToAll = false;
+		this.comment = "";
 	}
 
 	public Suggestion(String id, boolean isProcessed, boolean isApproved, String campId,
-					String newCampName, boolean newCampisVisible, LocalDate newCampStartDate,
-					LocalDate newCampEndDate, LocalDate newRegClosingDate, String newLocation,
-					int newTotalSlots, int newCampCommitteeSlots, String newDescription, boolean newIsOpenToAll) {
+					String comment) {
 		this.id = id;
 		this.isProcessed = isProcessed;
 		this.isApproved = isApproved;
 		this.campId = campId;
-		this.newCampname = newCampName;
-		this.newCampisVisible = newCampisVisible;
-		this.newCampStartDate = newCampStartDate;
-		this.newCampEndDate = newCampEndDate;
-		this.newRegClosingDate = newRegClosingDate;
-		this.newLocation = newLocation;
-		this.newTotalSlots = newTotalSlots;
-		this.newCampCommitteeSlots = newCampCommitteeSlots;
-		this.newDescription = newDescription;
-		this.newIsOpenToAll = newIsOpenToAll;
+		this.comment = comment;
 	}
 
 
@@ -101,78 +70,4 @@ public class Suggestion {
     public void setCampId(String campId) {
         this.campId = campId;
     }
-
-    public String getNewCampname() {
-        return this.newCampname;
-    }
-
-    public void setNewCampname(String newCampname) {
-        this.newCampname = newCampname;
-    }
-
-    public boolean isNewCampisVisible() {
-        return this.newCampisVisible;
-    }
-
-    public void setNewCampisVisible(boolean newCampisVisible) {
-        this.newCampisVisible = newCampisVisible;
-    }
-
-    public LocalDate getNewCampStartDate() {
-        return this.newCampStartDate;
-    }
-
-    public void setNewCampStartDate(LocalDate newCampStartDate) {
-        this.newCampStartDate = newCampStartDate;
-    }
-
-    public LocalDate getNewCampEndDate() {
-        return this.newCampEndDate;
-    }
-
-    public void setNewCampendDate(LocalDate newCampEndDate) {
-        this.newCampEndDate = newCampEndDate;
-    }
-
-    public LocalDate getNewRegClosingDate() {
-        return this.newRegClosingDate;
-    }
-
-    public void setNewRegClosingDate(LocalDate newRegClosingDate) {
-        this.newRegClosingDate = newRegClosingDate;
-    }
-
-    public String getNewLocation() {
-        return this.newLocation;
-    }
-
-    public void setNewLocation(String newLocation) {
-        this.newLocation = newLocation;
-    }
-
-    public int getNewTotalSlots() {
-        return this.newTotalSlots;
-    }
-
-    public void setNewTotalSlots(int newTotalSlots) {
-        this.newTotalSlots = newTotalSlots;
-    }
-
-    public int getNewCampCommitteeSlots() {
-        return this.newCampCommitteeSlots;
-    }
-
-    public void setNewCampCommitteeSlots(int newCampCommitteeSlots) {
-        this.newCampCommitteeSlots = newCampCommitteeSlots;
-    }
-
-    public String getNewDescription() {
-        return this.newDescription;
-    }
-
-    public void setNewDescription(String newDescription) {
-        this.newDescription = newDescription;
-    }
-
-
 }

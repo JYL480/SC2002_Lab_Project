@@ -64,23 +64,8 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
             CampCommitteeMember ccm = new CampCommitteeMember(DB_Student.readStudent(ccmId), DB_CCMIdToPoints.getPoints(ccmId));
             ccm.setPoints(ccm.getPoints()+1);
             DB_CCMIdToPoints.updatePoints(ccm.getId(), ccm.getPoints());
-            Camp newCamp = new Camp(
-                suggestion.getCampId(),
-                suggestion.getNewCampname(),
-                suggestion.isNewCampisVisible(),
-                suggestion.getNewCampStartDate(),
-                suggestion.getNewCampEndDate(),
-                suggestion.getNewRegClosingDate(),
-                suggestion.getNewLocation(),
-                suggestion.getNewTotalSlots(),
-                suggestion.getNewCampCommitteeSlots(),
-                suggestion.getNewDescription(),
-                this.getFacultyId(),
-                this.getId(),
-                suggestion.getNewIsOpenToAll()// add this column to suggestion
-            );
-            DB_Camp.updateCamp(newCamp);
         }
+        DB_Suggestion.updateSuggestion(suggestion);
 
     }
 
