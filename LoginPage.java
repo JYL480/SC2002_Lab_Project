@@ -4,29 +4,26 @@ public class LoginPage implements Page{
     public void loginInfoInput() {
         System.out.println("========= Login Page =========");
         Scanner scanner = new Scanner(System.in);
-        int choice;
 
         //UserTypeInput
         System.out.println("Login As: ");
         System.out.println("1. Attendee");
         System.out.println("2. Camp committee member");
         System.out.println("3. Staff");
-        System.out.print("Enter choice: ");
-        while (CommandLineApp.LoggedInUserType != null) {
-            choice = Integer.parseInt(scanner.nextLine());
-            switch (choice) {
-                case 1:
-                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
-                    break;
-                case 2:
-                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
-                    break;
-                case 3:
-                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
-                    break;
-                default:
-                    break;
-            }
+        System.out.println("Enter choice: ");
+        int choice = Integer.parseInt(scanner.nextLine());
+        switch (choice) {
+            case 1:
+                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                break;
+            case 2:
+                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                break;
+            case 3:
+                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                break;
+            default:
+                break;
         }
         //UserID input
         System.out.println("Enter User ID: ");
