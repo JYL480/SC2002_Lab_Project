@@ -103,6 +103,6 @@ public class Student extends User implements StudentCampInterface {
 
     public void changePassword(String newPassword) {
         this.setPassword(newPassword);
-        DB_Student.updateStudent(this, 3);
+        DB_Student.updateStudent(this);
     }
 }

@@ -265,7 +265,7 @@ public abstract class DB_Base<T> {
             row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue("campId");
             while (iterator.hasNext()) {
                 row = iterator.next();
-                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue("asdfsdf");
+                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(12);
                 }
                 try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);

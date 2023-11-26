@@ -48,8 +48,8 @@ public class DB_Student extends DB_Base<Student> {
 
     }
 
-    public static void updateStudent(Student student, int columnIndex) {
-        instance.update(student.getId(), columnIndex, student);
+    public static void updateStudent(Student student) {
+        instance.update(student.getId(), 0, student);
     }
 
     public static void deleteStudent(String studentId) {

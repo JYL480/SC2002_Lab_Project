@@ -28,6 +28,10 @@ public class ChangePasswordPage implements Page{
                     if (newPassword1.equals(newPassword2)) {
                         staff.changePassword(newPassword2);
                         System.out.println("Password changed succsefully!");
+                        if(staff.isNewLogin()) {
+                            staff.setNewLogin(false);
+                            DB_Staff.updateStaff(staff);
+                        }
                     }
                     else {
                         System.out.println("Passwords do not match! Please try again");
@@ -54,6 +58,10 @@ public class ChangePasswordPage implements Page{
                     if (newPassword1.equals(newPassword2)) {
                         student.changePassword(newPassword2);
                         System.out.println("Password changed succsefully!");
+                        if(student.isNewLogin()) {
+                            student.setNewLogin(false);
+                            DB_Student.updateStudent(student);
+                        }
                     }
                     else {
                         System.out.println("Passwords do not match! Please try again");
@@ -66,6 +74,7 @@ public class ChangePasswordPage implements Page{
                 }
             }
         }
+
         System.out.println("redirecting to login page...");
         CommandLineApp.LoggedInUser = null;
         CommandLineApp.LoggedInUserType = null;
