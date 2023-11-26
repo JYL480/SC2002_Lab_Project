@@ -77,7 +77,7 @@ public class Student extends User implements StudentCampInterface {
 
     public boolean registerForCampAsCCM(String campId)
     {
-        int maxCCMSlot = 10;
+       
         Camp camp = DB_Camp.readCamp(campId);
         /**
          * 1. check if there are slots
@@ -86,7 +86,7 @@ public class Student extends User implements StudentCampInterface {
          * 4. checck if ccm ahs registerd for any camp generally 
          * 5. check if ccm reg date has passed
          */
-        if(camp.getCampCommitteeSlots() == maxCCMSlot || 
+        if(camp.getCampCommitteeSlots() == 0 || 
         camp.getTotalSlots() == 0 || 
         this.isCampCommittee || 
         camp.getRegClosingDate().isBefore(LocalDate.now())
