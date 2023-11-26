@@ -20,6 +20,7 @@ public class StudentBrowseAvailableCampsPage implements Page{
 
         System.out.println("Enter the number of the camp to view details (0 to go back): ");
         int choice = -1;
+        int option;
 
         try {
             choice = Integer.parseInt(scanner.nextLine());
@@ -36,22 +37,22 @@ public class StudentBrowseAvailableCampsPage implements Page{
             viewCampDetails(campList.get(choice - 1));
             System.out.println("Enter 1 to register for the selected camp as attendee or 2 to register as committee member (0 to go back): ");
             try {
-            choice = Integer.parseInt(scanner.nextLine());
+            option = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid number.");
                 return new StudentBrowseAvailableCampsPage();
             }
-            if (choice == 1) {
+            if (option == 1) {
                 boolean registrationSuccess = student.registerForCampAsAttendee(campList.get(choice - 1).getId());
                 if(registrationSuccess) System.out.println("Successfully registered to " + campList.get(choice - 1).getName() + "!");
                 else System.out.println("Failed to registered to " + campList.get(choice - 1).getName() + "!");
             }
-            if (choice == 2) {
+            else if (option == 2) {
                 boolean registrationSuccess = student.registerForCampAsCCM(campList.get(choice - 1).getId());
                 if(registrationSuccess) System.out.println("Successfully registered to " + campList.get(choice - 1).getName() + "!");
                 else System.out.println("Failed to registered to " + campList.get(choice - 1).getName() + "!");
             }
-            else if (choice != 0) System.out.println("Invalid choice. Please try again.");
+            else if (option != 0) System.out.println("Invalid choice. Please try again.");
 
         } else {
             System.out.println("Invalid choice. Please try again.");
