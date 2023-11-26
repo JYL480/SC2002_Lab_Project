@@ -98,6 +98,8 @@ public class Student extends User implements StudentCampInterface {
         camp.setTotalSlots(camp.getTotalSlots()-1);
         camp.setCampCommitteeSlots(camp.getCampCommitteeSlots()-1);
         DB_Camp.updateCamp(camp);
+        this.setIsCampCommittee(true);
+        DB_Student.updateStudent(this);
         return true; 
     }
 
