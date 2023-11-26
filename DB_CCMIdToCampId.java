@@ -14,20 +14,18 @@ public class DB_CCMIdToCampId extends DB_Base<CCMIdToCampIdMapping>{
     protected CCMIdToCampIdMapping createEntity(Row row) {
         String ccmId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
         String campId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-        boolean isWithdrawn = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-        return new CCMIdToCampIdMapping(ccmId, campId, isWithdrawn);
+        return new CCMIdToCampIdMapping(ccmId, campId);
     }   
 
     @Override
     protected void writeEntityToRow(Row row, CCMIdToCampIdMapping ccmIdToCampIdMapping) {
         row.createCell(0).setCellValue(ccmIdToCampIdMapping.getCcmId());
         row.createCell(1).setCellValue(ccmIdToCampIdMapping.getCampId());
-        row.createCell(2).setCellValue(ccmIdToCampIdMapping.isWithdrawn());
     }
 
 
     public static void createMapping(String ccmId, String campId) {
-        instance.create(new CCMIdToCampIdMapping(ccmId, campId, false));
+        instance.create(new CCMIdToCampIdMapping(ccmId, campId));
     }
 
     public static String getCampId(String ccmId) {
@@ -38,20 +36,9 @@ public class DB_CCMIdToCampId extends DB_Base<CCMIdToCampIdMapping>{
         ArrayList<String> ccmIds = new ArrayList<>();
         ArrayList<CCMIdToCampIdMapping> mappings = instance.getAllById(campId, 1);
         for (CCMIdToCampIdMapping mapping : mappings) {
-            if(!mapping.isWithdrawn()) ccmIds.add(mapping.getCcmId());
+            ccmIds.add(mapping.getCcmId());
         }
         return ccmIds;
-    }
-
-    public static boolean isWithdrawn(String ccmId, String campId) {
-        CCMIdToCampIdMapping mapping = instance.getMapping(ccmId, campId, 0, 1);
-        return mapping.isWithdrawn();
-    }
-
-    public static void updateWithdrawn(String ccmId, String campId) {
-        CCMIdToCampIdMapping ccmIdToCampIdMapping = instance.getMapping(ccmId, campId, 0, 1);
-        ccmIdToCampIdMapping.setWithdrawn(true);
-        instance.update(ccmId, 0, ccmIdToCampIdMapping);
     }
 
     // Additional methods (create/update/delete) can be added as needed

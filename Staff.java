@@ -83,26 +83,6 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         }
 
     }
-    // will have to check what performance actually is
-   
-    public void givePerformanceReview(Performance performance, String ccmId) {
-        // Implement logic to give performance review to a camp committee member
-        // DB_CCMIdToPerformanceId.createMapping(ccmId, performance.getId());
-        // DB_Performance.createPerformance(performance);
-    }
-
-
-    public void editPerformanceReview(Performance performance) {
-        // Implement logic to edit performance review of a camp committee member
-        // DB_Performance.updatePerformance(performance);
-    }
-
-    
-    public void deletePerformanceReview(String performanceId, String ccmId) {
-        // Implement logic to delete performance review of a camp committee member
-        // DB_CCMIdToPerformanceId.deleteMapping(ccmId, performanceId);
-        // DB_Performance.deletePerformance(performanceId);
-    }
 
     
     public void createCamp(Camp camp) {
