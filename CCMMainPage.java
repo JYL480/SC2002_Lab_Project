@@ -46,6 +46,7 @@ public class CCMMainPage implements Page {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter a valid input.");
+                scanner.nextLine(); 
                 return new CCMMainPage();
             }
 
