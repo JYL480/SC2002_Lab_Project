@@ -17,10 +17,10 @@ public class LoginPage implements Page{
                 CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
                 break;
             case 2:
-                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                CommandLineApp.LoggedInUserType = UserType.CCM;
                 break;
             case 3:
-                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                CommandLineApp.LoggedInUserType = UserType.STAFF;
                 break;
             default:
                 break;
