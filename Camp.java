@@ -1,6 +1,7 @@
 // import java.util.ArrayList;
 // import java.time.String;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Camp {
 
@@ -155,6 +156,15 @@ public class Camp {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public ArrayList<Student> getAllStudents() {
+	ArrayList<String> studentIds = DB_AttendeeIdToCampId.getAttendeeIds(this.id);
+	ArrayList<Student> studentList = new ArrayList<>();
+	for(String studentId : studentIds){
+		studentList.add(DB_Student.readStudent(studentId));
+	}
+	return studentList;
 	}
 
 	// public static void main(String[] args) {
