@@ -7,7 +7,6 @@ public class ViewAndReplyEnquiriesPage implements Page{
 
         System.out.println("===== View and Reply to Student Enquiries =====");
         ArrayList<Enquiry> enquiries = ccm.viewAllAttendeeEnquiries();   
-
         int index = 1;
         for (Enquiry en: enquiries){ 
             System.out.println(index + ". " + en.getSubject());
@@ -17,7 +16,7 @@ public class ViewAndReplyEnquiriesPage implements Page{
         // Let user choose a camp
         int selectedEnquiryIndex;
         do {
-            System.out.print("Enter the number of the enquiry to submit enquiry (0 to go back): ");
+            System.out.print("Enter the number of the enquiry to reply enquiry (0 to go back): ");
             try {
                 selectedEnquiryIndex = Integer.parseInt(scanner.nextLine());
                 if (selectedEnquiryIndex == 0) {
