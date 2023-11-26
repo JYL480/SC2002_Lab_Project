@@ -16,7 +16,7 @@ public class Suggestion {
 	}
 
 	public Suggestion() {
-		this.id = "";  // Set a default value for id, you can change it to any default value you prefer
+		this.id = RandomIdGenerator.generateRandomId();  // Set a default value for id, you can change it to any default value you prefer
 		this.isProcessed = false;
 		this.isApproved = false;
 		// Initialize other fields with default values if needed
