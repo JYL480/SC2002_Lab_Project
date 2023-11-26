@@ -8,9 +8,9 @@ public class GenerateCampReportsPage implements Page {
         while (true) {
             System.out.println("===== Generate Camp Reports =====");
             System.out.println("1. Student Enrolled Camp Report");
+            System.out.println("2. Return to Main Menu");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();
             switch (choice) {
                 case 1:
                     Camp camp = ccm.getCampDetails();
@@ -19,8 +19,8 @@ public class GenerateCampReportsPage implements Page {
                     break;
                 case 2:
                     System.out.println("Returning to Main Menu.");
-                    scanner.close();
                     return new CCMMainPage();
+                    
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
