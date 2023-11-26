@@ -1,26 +1,15 @@
 public class CommandLineApp {
-    public static User user = null;
+    public static User LoggedInUser = null;
+    public static UserType LoggedInUserType;
+
     public static void main(String[] args) {
-        String currentPage = "loginPage";
+        Page currentPage = new LoginPage();
 
         do {
-            switch (currentPage) {
-                case "loginPage":
-                    LoginPage loginPage = new LoginPage();
-                    currentPage = loginPage.show();
-                    break;
-                case "changePassword":
-                    ChangePasswordPage changePasswordPage = new ChangePasswordPage();
-                    currentPage = changePasswordPage.show();
-                    break;
-                case "main":
-                    //navigate to main page
-                    break;
-                default:
-                    System.out.println("Invalid page. Exiting...");
-                    break;
-            }
-        } while (!currentPage.equals("exit"));
+            // Transition to the next page
+            currentPage = currentPage.show();
+
+        } while (!(currentPage instanceof ExitPage));
 
         System.out.println("Exiting application...");
     }

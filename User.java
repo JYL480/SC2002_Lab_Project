@@ -3,15 +3,47 @@ public class User {
     private String password;
     private String name;
     private String email;
+    private boolean isNewLogin;
+    private String facultyId;
 
-
-    public User(String id, String password, String name, String email) {
+    public User(String id, String password, String name, String email, String facultyId) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.isNewLogin = true; // Default value
+        this.facultyId = facultyId; // Default value
     }
 
+    // Additional constructor with isNewLogin
+    public User(String id, String password, String name, String email, boolean isNewLogin, String facultyId) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.isNewLogin = isNewLogin;
+        this.facultyId = facultyId;
+    }
+
+    // Getter and setter methods for isNewLogin
+    public boolean isNewLogin() {
+        return isNewLogin;
+    }
+
+    public void setNewLogin(boolean isNewLogin) {
+        this.isNewLogin = isNewLogin;
+    }
+
+    // Getter and setter methods for facultyId
+    public String getFacultyId() {
+        return facultyId;
+    }
+
+    public void setFacultyId(String facultyId) {
+        this.facultyId = facultyId;
+    }
+
+    // Getter and setter methods for other attributes
     public String getId() {
         return this.id;
     }
@@ -44,3 +76,4 @@ public class User {
         this.email = email;
     }
 }
+

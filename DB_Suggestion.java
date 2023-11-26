@@ -1,240 +1,100 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.time.LocalDate;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class DB_Suggestion {
+public class DB_Suggestion extends DB_Base<Suggestion> {
     private static final String FILE_PATH = DatabaseFilePaths.SUGGESTION;
+    private static final DB_Suggestion instance = new DB_Suggestion();
+
+    public DB_Suggestion(){
+        super(FILE_PATH);
+    }
+
+    @Override
+    protected Suggestion createEntity(Row row) {
+        String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        boolean isProcessed = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+        boolean isApproved = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+        String campId = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String newCampName = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        boolean newCampIsVisible = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+        String newCampStartDate = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String newCampEndDate = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String newRegClosingDate = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String newLocation = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        int newTotalSlots = (int) row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
+        int newCampCommitteeSlots = (int) row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
+        String newDescription = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        boolean newIsOpenToAll = row.getCell(13, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+
+        return new Suggestion(id, isProcessed, isApproved, campId, newCampName, newCampIsVisible,
+                LocalDate.parse(newCampStartDate), LocalDate.parse(newCampEndDate), LocalDate.parse(newRegClosingDate), newLocation, newTotalSlots,
+                newCampCommitteeSlots, newDescription, newIsOpenToAll);
+    }
+
+    protected void writeEntityToRow(Row newRow, Suggestion suggestion) {
+        Cell idCell = newRow.createCell(0);
+        idCell.setCellValue(suggestion.getId());
+
+        Cell isProcessedCell = newRow.createCell(1);
+        isProcessedCell.setCellValue(suggestion.getIsProcessed());
+
+        Cell isApprovedCell = newRow.createCell(2); // Assuming isApproved is the next column
+        isApprovedCell.setCellValue(suggestion.getIsApproved());
+
+        Cell campIdCell = newRow.createCell(3);
+        campIdCell.setCellValue(suggestion.getCampId());
+
+        Cell newCampNameCell = newRow.createCell(4);
+        newCampNameCell.setCellValue(suggestion.getNewCampname());
+
+        Cell newCampIsVisibleCell = newRow.createCell(5);
+        newCampIsVisibleCell.setCellValue(suggestion.isNewCampisVisible());
+
+        Cell newCampStartDateCell = newRow.createCell(6);
+        newCampStartDateCell.setCellValue(suggestion.getNewCampStartDate().toString());
+
+        Cell newCampEndDateCell = newRow.createCell(7);
+        newCampEndDateCell.setCellValue(suggestion.getNewCampEndDate().toString());
+
+        Cell newRegClosingDateCell = newRow.createCell(8);
+        newRegClosingDateCell.setCellValue(suggestion.getNewRegClosingDate().toString());
+
+        Cell newLocationCell = newRow.createCell(9);
+        newLocationCell.setCellValue(suggestion.getNewLocation());
+
+        Cell newTotalSlotsCell = newRow.createCell(10);
+        newTotalSlotsCell.setCellValue(suggestion.getNewTotalSlots());
+
+        Cell newCampCommitteeSlotsCell = newRow.createCell(11);
+        newCampCommitteeSlotsCell.setCellValue(suggestion.getNewCampCommitteeSlots());
+
+        Cell newDescriptionCell = newRow.createCell(12);
+        newDescriptionCell.setCellValue(suggestion.getNewDescription());
+
+        Cell newIsOpenToAllCell = newRow.createCell(13);
+        newIsOpenToAllCell.setCellValue(suggestion.getNewIsOpenToAll());
+
+    }
 
     public static void createSuggestion(Suggestion suggestion) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            // Find the last row number
-            int lastRowNum = sheet.getLastRowNum();
-
-            // Create a new row
-            Row newRow = sheet.createRow(lastRowNum + 1);
-
-            // Write suggestion data to the cells
-            Cell idCell = newRow.createCell(0);
-            idCell.setCellValue(suggestion.getId());
-
-            Cell isProcessedCell = newRow.createCell(1);
-            isProcessedCell.setCellValue(suggestion.getIsProcessed());
-
-            Cell isApprovedCell = newRow.createCell(2); // Assuming isApproved is the next column
-            isApprovedCell.setCellValue(suggestion.getIsApproved());
-
-            Cell campIdCell = newRow.createCell(3);
-            campIdCell.setCellValue(suggestion.getCampId());
-
-            Cell newCampNameCell = newRow.createCell(4);
-            newCampNameCell.setCellValue(suggestion.getNewCampname());
-
-            Cell newCampIsVisibleCell = newRow.createCell(5);
-            newCampIsVisibleCell.setCellValue(suggestion.isNewCampisVisible());
-
-            Cell newCampStartDateCell = newRow.createCell(6);
-            newCampStartDateCell.setCellValue(suggestion.getNewCampStartDate().toString());
-
-            Cell newCampEndDateCell = newRow.createCell(7);
-            newCampEndDateCell.setCellValue(suggestion.getNewCampEndDate().toString());
-
-            Cell newRegClosingDateCell = newRow.createCell(8);
-            newRegClosingDateCell.setCellValue(suggestion.getNewRegClosingDate().toString());
-
-            Cell newLocationCell = newRow.createCell(9);
-            newLocationCell.setCellValue(suggestion.getNewLocation());
-
-            Cell newTotalSlotsCell = newRow.createCell(10);
-            newTotalSlotsCell.setCellValue(suggestion.getNewTotalSlots());
-
-            Cell newCampCommitteeSlotsCell = newRow.createCell(11);
-            newCampCommitteeSlotsCell.setCellValue(suggestion.getNewCampCommitteeSlots());
-
-            Cell newDescriptionCell = newRow.createCell(12);
-            newDescriptionCell.setCellValue(suggestion.getNewDescription());
-
-            // Save the changes to the file
-            try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                workbook.write(fileOut);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
+       instance.create(suggestion);
     }
 
     public static Suggestion readSuggestion(String suggestionId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (suggestionId.equals(id)) {
-                    // Found the suggestion
-                    boolean isProcessed = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                    boolean isApproved = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                    String campId = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String newCampName = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    boolean newCampIsVisible = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                    String newCampStartDate = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String newCampEndDate = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String newRegClosingDate = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    String newLocation = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    int newTotalSlots = (int) row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                    int newCampCommitteeSlots = (int) row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                    String newDescription = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                    return new Suggestion(suggestionId, isProcessed, isApproved, campId, newCampName, newCampIsVisible,
-                            LocalDate.parse(newCampStartDate), LocalDate.parse(newCampEndDate), LocalDate.parse(newRegClosingDate), newLocation, newTotalSlots,
-                            newCampCommitteeSlots, newDescription);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        return null; // Suggestion not found
+        return instance.read(suggestionId, 0);
     }
 
     public static void updateSuggestion(Suggestion suggestion) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (suggestion.getId().equals(id)) {
-                    // Update the suggestion data in the row
-                    row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getIsProcessed());
-                    row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getIsApproved());
-                    row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getCampId());
-                    row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampname());
-                    row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.isNewCampisVisible());
-                    row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampStartDate().toString());
-                    row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampEndDate().toString());
-                    row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewRegClosingDate().toString());
-                    row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewLocation());
-                    row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewTotalSlots());
-                    row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewCampCommitteeSlots());
-                    row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(suggestion.getNewDescription());
-
-                    // Save the changes to the file
-                    try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                        workbook.write(fileOut);
-                    }
-
-                    return; // Suggestion updated
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Suggestion not found
+        instance.update(suggestion.getId(), 0, suggestion);
     }
 
     public static void deleteSuggestion(String suggestionId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (suggestionId.trim().equals(id)) {
-                        // Remove the row
-                        sheet.removeRow(row);
-
-                        // If the row is not the last row, shift the remaining rows up to fill the gap
-                        if (i < sheet.getLastRowNum()) {
-                            sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-                        }
-
-                        // Save the changes to the file
-                        try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                            workbook.write(fileOut);
-                        }
-
-                        // Adjust the row index after deletion
-                        i--;
-
-                        return; // Suggestion deleted
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Suggestion not found
+        instance.delete(suggestionId, 0);
     }
 
     public static ArrayList<Suggestion> getAllSuggestions() {
-        ArrayList<Suggestion> suggestions = new ArrayList<>();
-
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-
-                // Skip the header row
-                if (row.getRowNum() == 0) {
-                    continue;
-                }
-
-                String id = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                boolean isProcessed = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                boolean isApproved = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                String campId = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String newCampName = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                boolean newCampIsVisible = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-                String newCampStartDate = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String newCampEndDate = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String newRegClosingDate = row.getCell(8, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String newLocation = row.getCell(9, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                int newTotalSlots = (int) row.getCell(10, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                int newCampCommitteeSlots = (int) row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue();
-                String newDescription = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                suggestions.add(new Suggestion(id, isProcessed, isApproved, campId, newCampName, newCampIsVisible,
-                        LocalDate.parse(newCampStartDate), LocalDate.parse(newCampEndDate), LocalDate.parse(newRegClosingDate), newLocation, newTotalSlots,
-                        newCampCommitteeSlots, newDescription));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        return suggestions;
+        return instance.getAll();
     }
 
     // public static void main(String[] args) {

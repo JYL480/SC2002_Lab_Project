@@ -6,12 +6,21 @@ public class Enquiry {
     public String replyText;
     public String repliedByName;
     public boolean repliedByStaff;
+    public String campId;
 
-    public Enquiry() {
-        this(null, null, null, false, null, null, false);
+    public String getCampId() {
+        return campId;
     }
 
-    public Enquiry(String id, String subject, String description, boolean isProcessed, String replyText, String repliedByName, boolean repliedByStaff) {
+    public void setCampId(String campId) {
+        this.campId = campId;
+    }
+
+    public Enquiry() {
+        this(null, null, null, false, null, null, false, null);
+    }
+
+    public Enquiry(String id, String subject, String description, boolean isProcessed, String replyText, String repliedByName, boolean repliedByStaff, String campId) {
         this.id = id;
         this.subject = subject;
         this.description = description;
@@ -19,6 +28,7 @@ public class Enquiry {
         this.replyText = replyText;
         this.repliedByName = repliedByName;
         this.repliedByStaff = repliedByStaff;
+        this.campId = campId;
     }
     public String getDescription() {
         return description;
@@ -64,4 +74,7 @@ public class Enquiry {
         this.repliedByStaff = repliedByStaff;
     }
 
+    public Camp getCamp() {
+        return DB_Camp.readCamp(campId);
+    }
 }

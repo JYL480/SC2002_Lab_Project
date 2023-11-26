@@ -1,34 +1,24 @@
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class LoginManager {
-    public static User obtainUserObject(String email, String password) {
-        //check if user is an ccm or attendee
-        User user = DB_Attendee.readAttendeeByEmail(email);
-        if (user != null) {
-            Attendee attendee = (Attendee) user;
-            if(!attendee.getPassword().equals(password)) return null;
-            if(attendee.getIsCampCommittee()) {
-                CampCommitteeMember campCommitteeMember = DB_CCM.readCampCommitteeMember(attendee.getId());
-                return campCommitteeMember;
+    public static boolean validateUser(String email, String password) {
+        if (CommandLineApp.LoggedInUserType == UserType.ATTENDEE || CommandLineApp.LoggedInUserType == UserType.CCM) {
+            Student student = DB_Student.readStudentByEmail(email);
+            if (student != null && student.getPassword().equals(password)) {
+                if (CommandLineApp.LoggedInUserType == UserType.ATTENDEE) CommandLineApp.LoggedInUser = student;
+                else CommandLineApp.LoggedInUser = new CampCommitteeMember(student, DB_CCMIdToPoints.getPoints(student.getId()));
+                return true;
+            } else {
+                return false;
             }
-            return attendee;
         }
-        //check if user is staff
         else {
-            user = DB_Staff.readStaffByEmail(email);
-            if (user != null) {
-                Staff staff = (Staff) user;
-                if (!staff.getPassword().equals(password)) return null;
-                return staff;
+            Staff staff = DB_Staff.readStaffByEmail(email);
+            if (staff != null && staff.getPassword().equals(password)) {
+                CommandLineApp.LoggedInUser = staff;
+                return true;
+            } else {
+                return false;
             }
-            return null;
         }
     }
 }

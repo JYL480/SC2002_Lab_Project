@@ -1,167 +1,62 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class DB_AttendeeIdToEnquiryId {
+public class DB_AttendeeIdToEnquiryId extends DB_Base<AttendeeIdToEnquiryIdMapping>{
     private static final String FILE_PATH = DatabaseFilePaths.ATTENDEE_ID_TO_ENQUIRY_ID;
+    private static final DB_AttendeeIdToEnquiryId instance = new DB_AttendeeIdToEnquiryId();
+
+    public DB_AttendeeIdToEnquiryId() {
+        super(FILE_PATH);
+    }
+
+    @Override
+    protected AttendeeIdToEnquiryIdMapping createEntity(Row row) {
+        String attendeeId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String enquiryId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        return new AttendeeIdToEnquiryIdMapping(attendeeId, enquiryId);
+        
+    }
+
+    @Override
+    protected void writeEntityToRow(Row row, AttendeeIdToEnquiryIdMapping attendeeIdToEnquiryIdMapping) {
+        row.createCell(0).setCellValue(attendeeIdToEnquiryIdMapping.getAttendeeId());
+        row.createCell(1).setCellValue(attendeeIdToEnquiryIdMapping.getEnquiryId());
+
+    }
+
 
     public static void createMapping(String attendeeId, String enquiryId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            // Find the last row number
-            int lastRowNum = sheet.getLastRowNum();
-
-            // Create a new row
-            Row newRow = sheet.createRow(lastRowNum + 1);
-
-            // Write mapping data to the cells
-            Cell attendeeIdCell = newRow.createCell(0);
-            attendeeIdCell.setCellValue(attendeeId);
-
-            Cell enquiryIdCell = newRow.createCell(1);
-            enquiryIdCell.setCellValue(enquiryId);
-
-            // Save the changes to the file
-            try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                workbook.write(fileOut);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
+        AttendeeIdToEnquiryIdMapping attendeeIdToEnquiryIdMapping = new AttendeeIdToEnquiryIdMapping(attendeeId, enquiryId);
+        instance.create(attendeeIdToEnquiryIdMapping);
     }
 
     public static ArrayList<String> getEnquiryIds(String attendeeId) {
+        ArrayList<AttendeeIdToEnquiryIdMapping> entityList = instance.getAllById(attendeeId, 0);
         ArrayList<String> enquiryIds = new ArrayList<>();
-
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String currentAttendeeId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (attendeeId.equals(currentAttendeeId)) {
-                    // Matching Attendee ID found, add corresponding Enquiry ID to the list
-                    String currentEnquiryId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    enquiryIds.add(currentEnquiryId);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+        for (AttendeeIdToEnquiryIdMapping mapping : entityList) {;
+            enquiryIds.add(mapping.getEnquiryId());
         }
-
         return enquiryIds;
     }
 
     public static ArrayList<String> getAttendeeIds(String enquiryId) {
         ArrayList<String> attendeeIds = new ArrayList<>();
-
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String currentEnquiryId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (enquiryId.equals(currentEnquiryId)) {
-                    // Matching Enquiry ID found, add corresponding Attendee ID to the list
-                    String currentAttendeeId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    attendeeIds.add(currentAttendeeId);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+        ArrayList<AttendeeIdToEnquiryIdMapping> entityList = instance.getAllById(enquiryId, 1);
+        for (AttendeeIdToEnquiryIdMapping mapping : entityList) {;
+            attendeeIds.add(mapping.getAttendeeId());
         }
-
         return attendeeIds;
+
     }
 
     // Additional methods (create/update/delete) can be added as needed
 
     public static void deleteMapping(String attendeeId, String enquiryId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String currentAttendeeId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-                    String currentEnquiryId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (attendeeId.trim().equals(currentAttendeeId) && enquiryId.trim().equals(currentEnquiryId)) {
-                        // Remove the row
-                        sheet.removeRow(row);
-
-                        // If the row is not the last row, shift the remaining rows up to fill the gap
-                        if (i < sheet.getLastRowNum()) {
-                            sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-                        }
-
-                        // Save the changes to the file
-                        try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                            workbook.write(fileOut);
-                        }
-
-                        // Adjust the row index after deletion
-                        i--;
-
-                        return; // Mapping deleted
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Mapping not found
+        instance.deleteIdMapping(attendeeId, enquiryId, 0 , 1);
     }
 
     public static boolean isExists(String attendeeId, String enquiryId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String currentAttendeeId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-                    String currentEnquiryId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (attendeeId.trim().equals(currentAttendeeId) && enquiryId.trim().equals(currentEnquiryId)) {
-                        return true; // Mapping exists
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Mapping not found
-        return false;
+        return (instance.getMapping(attendeeId, enquiryId, 0, 1) != null);
     }
 
     // public static void main(String[] args) {
@@ -223,4 +118,38 @@ public class DB_AttendeeIdToEnquiryId {
     //     exists1 = DB_AttendeeIdToEnquiryId.isExists(attendeeId1, enquiryId1);
     //     System.out.println("Mapping exists after deletion: " + exists1);
     // }
+
+//     public static void main(String[] args) {
+//         try (FileInputStream file = new FileInputStream(FILE_PATH);
+//              Workbook workbook = new XSSFWorkbook(file)) {
+    
+//             Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
+    
+//             int lastRowNum = sheet.getLastRowNum();
+    
+//             for (int i = 1; i <= lastRowNum; i++) {
+//                 Row row = sheet.getRow(i);
+    
+//                 if (row != null) {
+//                     sheet.removeRow(row);
+    
+//                     // If the row is not the last row, shift the remaining rows up to fill the gap
+//                     if (i < lastRowNum) {
+//                         sheet.shiftRows(i + 1, lastRowNum, -1);
+//                     }
+    
+//                     // Adjust the row index after deletion
+//                     i--;
+//                 }
+//             }
+    
+//             // Save the changes to the file
+//             try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
+//                 workbook.write(fileOut);
+//             }
+    
+//         } catch (IOException e) {
+//             e.printStackTrace(); // Handle the exception according to your needs
+//         }
+// }
 }

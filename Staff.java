@@ -5,8 +5,12 @@ import java.util.ArrayList;
 
 public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffCampCommitteeInterface, StaffCampInterface, StaffReportInterface {
 
-    public Staff(String id, String password, String name, String email) {
-        super(id, password, name, email);
+    public Staff(String id, String password, String name, String email, String facultyId) {
+        super(id, password, name, email, facultyId);
+    }
+
+    public Staff(String id, String password, String name, String email, boolean isNewLogin, String facultyId) {
+        super(id, password, name, email, isNewLogin, facultyId);
     }
 
     public ArrayList<Object[]> viewAllAttendeesEnquiriesByCampId(String campId) {
@@ -14,7 +18,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         ArrayList<Object[]> enquiryAttendeeArrays = new ArrayList<>();
         for (String aId : attendeeIds) {
             ArrayList<String> tmp = DB_AttendeeIdToEnquiryId.getEnquiryIds(aId);
-            Attendee attendee = DB_Attendee.readAttendee(aId);
+            Attendee attendee = new Attendee(DB_Student.readStudent(aId));
             for (String eId : tmp) {
                 Enquiry enquiry = DB_Enquiry.readEnquiry(eId);
                 enquiryAttendeeArrays.add(new Object[]{enquiry, attendee});
@@ -56,10 +60,10 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         //If is approved, give one point to ccm, if not, no points; Also change the camp details as well
         if(isApproved)
         {
-            String ccmId = DB_CCMIdToSuggestionId.getCCMIds(suggestionId).get(0);
-            CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
+            String ccmId = DB_CCMIdToSuggestionId.getCCMId(suggestionId);
+            CampCommitteeMember ccm = new CampCommitteeMember(DB_Student.readStudent(ccmId), DB_CCMIdToPoints.getPoints(ccmId));
             ccm.setPoints(ccm.getPoints()+1);
-            DB_CCM.updateCampCommitteeMember(ccm);
+            DB_CCMIdToPoints.updatePoints(ccm.getId(), ccm.getPoints());
             Camp newCamp = new Camp(
                 suggestion.getCampId(),
                 suggestion.getNewCampname(),
@@ -70,53 +74,53 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
                 suggestion.getNewLocation(),
                 suggestion.getNewTotalSlots(),
                 suggestion.getNewCampCommitteeSlots(),
-                suggestion.getNewDescription()
+                suggestion.getNewDescription(),
+                this.getFacultyId(),
+                this.getId(),
+                suggestion.getNewIsOpenToAll()// add this column to suggestion
             );
             DB_Camp.updateCamp(newCamp);
         }
 
     }
+    // will have to check what performance actually is
    
     public void givePerformanceReview(Performance performance, String ccmId) {
         // Implement logic to give performance review to a camp committee member
-        DB_CCMIdToPerformanceId.createMapping(ccmId, performance.getId());
-        DB_Performance.createPerformance(performance);
+        // DB_CCMIdToPerformanceId.createMapping(ccmId, performance.getId());
+        // DB_Performance.createPerformance(performance);
     }
 
 
     public void editPerformanceReview(Performance performance) {
         // Implement logic to edit performance review of a camp committee member
-        DB_Performance.updatePerformance(performance);
+        // DB_Performance.updatePerformance(performance);
     }
 
     
     public void deletePerformanceReview(String performanceId, String ccmId) {
         // Implement logic to delete performance review of a camp committee member
-        DB_CCMIdToPerformanceId.deleteMapping(ccmId, performanceId);
-        DB_Performance.deletePerformance(performanceId);
+        // DB_CCMIdToPerformanceId.deleteMapping(ccmId, performanceId);
+        // DB_Performance.deletePerformance(performanceId);
     }
 
     
-    public void createCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
+    public void createCamp(Camp camp) {
         // Implement logic to create a camp
         DB_Camp.createCamp(camp);
-        DB_StaffIdToCampId.createMapping(this.getId(), camp.getId());
-        for(Faculty f: allowedFaculty)
-        {
-            DB_CampIdToFacultyId.createMapping(camp.getId(), f.getId());
-        }
-        
     }
 
     
-    public void deleteCamp(String campId) {
+    public boolean deleteCamp(Camp camp) {
         // Implement logic to delete a camp
-        DB_Camp.deleteCamp(campId);
-        DB_StaffIdToCampId.deleteMappingsByCampId(campId);
-        DB_CampIdToFacultyId.deleteMappingsByCampId(campId);
-        DB_AttendeeIdToCampId.deleteMappingsByCampId(campId);
-        DB_CCMIdToCampId.deleteMappingsByCampId(campId);
-        DB_CampIdToFacultyId.deleteMappingsByCampId(campId);
+        if(camp.getStaffId() == this.getId()) {
+            String campId = camp.getId();
+            DB_Camp.deleteCamp(campId);
+            DB_AttendeeIdToCampId.deleteMappingsByCampId(campId);
+            DB_CCMIdToCampId.deleteMappingsByCampId(campId);
+            return true;
+        }
+        return false;
     }
 
     //Might need to add faculty info tbh
@@ -124,50 +128,27 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         ArrayList<Camp> camps = DB_Camp.getAllCamps();
         ArrayList<Object[]> campStaffFacultiesArrays = new ArrayList<>();
         for (Camp c : camps) {
-            String staffId = DB_StaffIdToCampId.getStaffId(c.getId());
+            String staffId = c.getStaffId();
             Staff staff = DB_Staff.readStaff(staffId);
-            ArrayList <String> facultyIds = DB_CampIdToFacultyId.getFacultyIds(c.getId());
-            ArrayList <Faculty> faculties = new ArrayList<>();
-            for(String id: facultyIds)
-            {
-                faculties.add(DB_Faculty.readFaculty(id));
-            }
-
-            campStaffFacultiesArrays.add(new Object[]{c, staff, faculties});  
+            Faculty faculty = DB_Faculty.readFaculty(c.getFacultyId());
+            campStaffFacultiesArrays.add(new Object[]{c, staff, faculty});  
         }
         return campStaffFacultiesArrays;
     }
 
    
-    public ArrayList<Object[]> viewSelfCreatedCamps() {
+    public ArrayList<Camp> viewSelfCreatedCamps() {
         // Implement logic to view camps created by the staff
-        ArrayList<String> campIds = DB_StaffIdToCampId.getCampIds(this.getId());
-        ArrayList<Object[]> campFacultiesArrays = new ArrayList<>(); 
-        for(String id: campIds)
-        {
-            Camp camp = DB_Camp.readCamp(id);
-            ArrayList <String> facultyIds = DB_CampIdToFacultyId.getFacultyIds(id);
-            ArrayList <Faculty> faculties = new ArrayList<>();
-            for(String fId: facultyIds)
-            {
-                faculties.add(DB_Faculty.readFaculty(fId));
-            }
-            campFacultiesArrays.add(new Object[]{camp, faculties});
-        }
-        return  campFacultiesArrays;
+        return DB_Camp.getCampsByStaffId(this.getId());
     }
 
   
-    public void editCamp(Camp camp, ArrayList<Faculty> allowedFaculty) {
-        // Implement logic to edit a camp
-        DB_Camp.updateCamp(camp);
-
-        //Need to check if allowed faculties need editing -- just delete the mappings n write again
-        DB_CampIdToFacultyId.deleteMappingsByCampId(camp.getId());
-        for(Faculty f: allowedFaculty)
-        {
-            DB_CampIdToFacultyId.createMapping(camp.getId(), f.getId());
+    public boolean editCamp(Camp camp) {
+        if (camp.getStaffId() == this.getId()) {
+            DB_Camp.updateCamp(camp);
+            return true;
         }
+        return false;
     }
 
     
@@ -184,12 +165,12 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
 
         // Loop through the attendee IDs and retrieve the attendee objects
         for (String attendeeId : attendeeIds) {
-            Attendee attendee = DB_Attendee.readAttendee(attendeeId);
+            Attendee attendee = new Attendee(DB_Student.readStudent(attendeeId));
             attendees.add(attendee);
         }
 
         for (String ccmId : ccmIds) {
-            CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
+            CampCommitteeMember ccm = new CampCommitteeMember(DB_Student.readStudent(ccmId), DB_CCMIdToPoints.getPoints(ccmId));
             ccms.add(ccm);
         }
         // Filter options
@@ -266,29 +247,29 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
 
 
     public void generatePerformanceReportOfCampCommitteeMembers(Camp camp) {
-        String campId = camp.getId();
+        // String campId = camp.getId();
 
 
-        // Get the list of attendee IDs for the camp 
-        ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
+        // // Get the list of attendee IDs for the camp 
+        // ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
 
-        String csvFilePath = "CampCommitteeMemberPerformance.csv";
-        ArrayList<String[]> data = new ArrayList<>();
-        data.add(new String[]{"ccmName", "ccmId","Rating","AreasDoneWell","AreasToImprove"});
+        // String csvFilePath = "CampCommitteeMemberPerformance.csv";
+        // ArrayList<String[]> data = new ArrayList<>();
+        // data.add(new String[]{"ccmName", "ccmId","Rating","AreasDoneWell","AreasToImprove"});
 
 
 
-        for(String ccmId: ccmIds){
-            CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
-            ArrayList<String> performanceId = DB_CCMIdToPerformanceId.getPerformanceIds(ccmId);
-            for(String pid: performanceId){
-                Performance performance = DB_Performance.readPerformance(pid);
+        // for(String ccmId: ccmIds){
+        //     CampCommitteeMember ccm = DB_Student.readStudent(ccmId);
+        //     ArrayList<String> performanceId = DB_CCMIdToPerformanceId.getPerformanceIds(ccmId);
+        //     for(String pid: performanceId){
+        //         Performance performance = DB_Performance.readPerformance(pid);
                
-                data.add(new String[]{ccm.getName(), ccm.getId(),String.valueOf(performance.getRating()) ,performance.getAreasDoneWell(),performance.getAreasToImprove()});
-            }
+        //         data.add(new String[]{ccm.getName(), ccm.getId(),String.valueOf(performance.getRating()) ,performance.getAreasDoneWell(),performance.getAreasToImprove()});
+        //     }
            
-        }
-        arrayListToCsv(data, csvFilePath);
+        // }
+        // arrayListToCsv(data, csvFilePath);
     }
     
 

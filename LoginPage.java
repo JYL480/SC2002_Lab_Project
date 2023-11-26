@@ -1,10 +1,33 @@
 import java.util.Scanner;
 
-public class LoginPage {
+public class LoginPage implements Page{
     public void loginInfoInput() {
         System.out.println("========= Login Page =========");
         Scanner scanner = new Scanner(System.in);
+        int choice;
 
+        //UserTypeInput
+        System.out.println("Login As: ");
+        System.out.println("1. Attendee");
+        System.out.println("2. Camp committee member");
+        System.out.println("3. Staff");
+        System.out.print("Enter choice: ");
+        while (CommandLineApp.LoggedInUserType != null) {
+            choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                    break;
+                case 2:
+                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                    break;
+                case 3:
+                    CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                    break;
+                default:
+                    break;
+            }
+        }
         //UserID input
         System.out.println("Enter User ID: ");
         String userID = scanner.nextLine();
@@ -15,19 +38,18 @@ public class LoginPage {
         String password = scanner.nextLine();
 
         //validate login
-        User user = LoginManager.obtainUserObject(email, password);
-        if (user == null) {
+        boolean validated = LoginManager.validateUser(email, password);
+        if (!validated) {
             System.out.println("Invalid credentials!");
         }
         else {
-            CommandLineApp.user = user;
             System.out.println("Login Successful!");
             System.out.println("Signing in...");
         }
-        scanner.close();
+        
     }
 
-    public String show() {
+    public Page show() {
         System.out.println("Welcome");
 
         Scanner scanner = new Scanner(System.in);
@@ -37,24 +59,22 @@ public class LoginPage {
             System.out.println("Press 1 to proceed to login");
             System.out.println("Press any other key to exit");
             System.out.print("Enter choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
-                    LoginPage loginPage = new LoginPage();
-                    loginPage.loginInfoInput();
+                    loginInfoInput();
                     break;
                 default:
-                    return "exit";
+                    return new ExitPage();
             }
-        } while (CommandLineApp.user == null && choice == 1);
-        scanner.close();
-        // find out whether this is the first time the user is logging in 
-        if (true) {
+        } while (CommandLineApp.LoggedInUser == null && choice == 1);
+        
+        // find out whether this is the first time the user is logging in
+        if (CommandLineApp.LoggedInUser.isNewLogin()) {
             System.out.println("Seems like you are a new user. Please change your password before you proceed");
-            return "changePassword";
+            return new ChangePasswordPage();
         }
-        return "main";
+        return new MainMenuPage();
     }
 }
