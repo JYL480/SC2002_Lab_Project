@@ -14,10 +14,43 @@ public class Camp {
 	private int totalSlots;
 	private int campCommitteeSlots;
 	private String description;
+	private String facultyId;
+	public String getFacultyId() {
+		return facultyId;
+	}
+
+
+	public void setFacultyId(String facultyId) {
+		this.facultyId = facultyId;
+	}
+
+
+	private String staffId;
+	public String getStaffId() {
+		return staffId;
+	}
+
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}
+
+
+	private boolean openToAll;
+
+	public boolean isOpenToAll() {
+		return openToAll;
+	}
+
+
+	public void setOpenToAll(boolean openToAll) {
+		this.openToAll = openToAll;
+	}
+
 
 	public Camp(String id, String name, boolean isVisible, LocalDate startDate, 
 	LocalDate endDate, LocalDate regClosingDate, String location, 
-	int totalSlots, int campCommitteeSlots, String description){
+	int totalSlots, int campCommitteeSlots, String description, String facultyId, String staffId, boolean openToAll){
 		this.id = id;
 		this.name = name;
 		this.isVisible = isVisible;
@@ -28,8 +61,10 @@ public class Camp {
 		this.totalSlots = totalSlots;
 		this.campCommitteeSlots = campCommitteeSlots;
 		this.description = description;
+		this.facultyId = facultyId;
+		this.staffId = staffId;
+		this.openToAll = openToAll;
 	}
-
 
 	public String getId() {
 		return this.id;

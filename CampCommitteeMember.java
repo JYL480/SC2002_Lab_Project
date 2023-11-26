@@ -8,10 +8,30 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 
 	private int points;
 
-	public CampCommitteeMember(String id, String password, String name, String email, boolean isCampCommittee, int points) {
-        super(id, password, name, email, isCampCommittee);
+	public CampCommitteeMember(String id, String password, String name, String email, boolean isCampCommittee, boolean isNewLogin, String facultyId, int points) {
+        super(id, password, name, email, isCampCommittee, isNewLogin, facultyId);
         this.points = points;
     }
+
+	public CampCommitteeMember(String id, String password, String name, String email, boolean isCampCommittee, boolean isNewLogin, String facultyId) {
+        super(id, password, name, email, isCampCommittee, isNewLogin, facultyId);
+        this.points = 0;
+    }
+
+	public CampCommitteeMember(String id, String password, String name, String email, boolean isCampCommittee, String facultyId, int points) {
+        super(id, password, name, email, isCampCommittee, facultyId);
+        this.points = points;
+    }
+
+	public CampCommitteeMember(String id, String password, String name, String email, boolean isCampCommittee, String facultyId) {
+        super(id, password, name, email, isCampCommittee, facultyId);
+        this.points = 0;
+    }
+
+	public CampCommitteeMember(Student student, int points) {
+		super(student.getId(), student.getPassword(), student.getName(), student.getEmail(), student.getIsCampCommittee(), student.isNewLogin(), student.getFacultyId());
+		this.points = points;
+	}
 
 	public void setPoints(int points) {
 		this.points = points;
@@ -26,12 +46,8 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 		// Implement logic to submit a suggestion
 		DB_CCMIdToSuggestionId.createMapping(getId(), suggestion.getId());
 		DB_Suggestion.createSuggestion(suggestion);
-
-		//get a point for a suggestion
-		String ccmId = DB_CCMIdToSuggestionId.getCCMIds(suggestion.getId()).get(0);
-		CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
-		ccm.setPoints(ccm.getPoints() + 1);
-		DB_CCM.updateCampCommitteeMember(ccm);
+		this.setPoints(this.getPoints() + 1);
+		DB_CCMIdToPoints.updatePoints(this.getId(), this.points);
 	}
 
 
@@ -74,7 +90,7 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	//This should return a specific camp's attendees' enquiries - camp that this ccm manages
 	public ArrayList<Enquiry> viewAllAttendeeEnquiries() {
 		// Implement logic to view all attendee enquiries
-		String campId = DB_CCMIdToCampId.getCampIds(this.getId()).get(0);
+		String campId = DB_CCMIdToCampId.getCampId(this.getId());
 		ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
 		ArrayList<String> enquiryIds = new ArrayList<>();
 		for(String aId: attendeeIds)
@@ -104,7 +120,7 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 		
 			//Give the CCM one point
 			this.setPoints(this.getPoints()+1);
-			DB_CCM.updateCampCommitteeMember(this);
+			DB_CCMIdToPoints.updatePoints(this.getId(), this.points);
 
 		}
 	}
@@ -113,7 +129,7 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 	public Camp getCampDetails() 
 	{
 		//Each CCM Only manages one Camp but the code returns an arraylist - just take the first element
-		String campId = DB_CCMIdToCampId.getCampIds(this.getId()).get(0);
+		String campId = DB_CCMIdToCampId.getCampId(this.getId());
 		return DB_Camp.readCamp(campId);
 	}
 
@@ -130,13 +146,14 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 
         // Loop through the attendee IDs and retrieve the attendee objects
         for (String attendeeId : attendeeIds) {
-            Attendee attendee = DB_Attendee.readAttendee(attendeeId);
-            attendees.add(attendee);
+            Attendee attendee = new Attendee(DB_Student.readStudent(attendeeId));
+			attendees.add(attendee);
         }
 
         for (String ccmId : ccmIds) {
-            CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
-            ccms.add(ccm);
+            Student student = DB_Student.readStudent(ccmId);
+            CampCommitteeMember ccm = new CampCommitteeMember(student, DB_CCMIdToPoints.getPoints(ccmId));
+			ccms.add(ccm);
         }
         // Filter options
         // 1 = attendee

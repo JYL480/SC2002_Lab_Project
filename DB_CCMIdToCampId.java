@@ -1,205 +1,72 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class DB_CCMIdToCampId {
+public class DB_CCMIdToCampId extends DB_Base<CCMIdToCampIdMapping>{
     private static final String FILE_PATH = DatabaseFilePaths.CCM_ID_TO_CAMP_ID;
+    private static final DB_CCMIdToCampId instance = new DB_CCMIdToCampId();
 
-    public static void createMapping(String ccmId, String campId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
+    public DB_CCMIdToCampId() {
+        super(FILE_PATH);
+    }
+    
+    @Override
+    protected CCMIdToCampIdMapping createEntity(Row row) {
+        String ccmId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String campId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        boolean isWithdrawn = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
+        return new CCMIdToCampIdMapping(ccmId, campId, isWithdrawn);
+    }   
 
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            // Find the last row number
-            int lastRowNum = sheet.getLastRowNum();
-
-            // Create a new row
-            Row newRow = sheet.createRow(lastRowNum + 1);
-
-            // Write mapping data to the cells
-            Cell ccmIdCell = newRow.createCell(0);
-            ccmIdCell.setCellValue(ccmId);
-
-            Cell campIdCell = newRow.createCell(1);
-            campIdCell.setCellValue(campId);
-
-            // Save the changes to the file
-            try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                workbook.write(fileOut);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
+    @Override
+    protected void writeEntityToRow(Row row, CCMIdToCampIdMapping ccmIdToCampIdMapping) {
+        row.createCell(0).setCellValue(ccmIdToCampIdMapping.getCcmId());
+        row.createCell(1).setCellValue(ccmIdToCampIdMapping.getCampId());
+        row.createCell(2).setCellValue(ccmIdToCampIdMapping.isWithdrawn());
     }
 
-    public static ArrayList<String> getCampIds(String ccmId) {
-        ArrayList<String> campIds = new ArrayList<>();
 
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
+    public static void createMapping(String ccmId, String campId) {
+        instance.create(new CCMIdToCampIdMapping(ccmId, campId, false));
+    }
 
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String currentCCMId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (ccmId.equals(currentCCMId)) {
-                    // Matching CCM ID found, add corresponding Camp ID to the list
-                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    campIds.add(currentCampId);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        return campIds;
+    public static String getCampId(String ccmId) {
+        return instance.read(ccmId, 0).getCampId();
     }
 
     public static ArrayList<String> getCCMIds(String campId) {
         ArrayList<String> ccmIds = new ArrayList<>();
-
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            Iterator<Row> iterator = sheet.iterator();
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-
-                if (campId.equals(currentCampId)) {
-                    // Matching Camp ID found, add corresponding CCM ID to the list
-                    String currentCCMId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                    ccmIds.add(currentCCMId);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
+        ArrayList<CCMIdToCampIdMapping> mappings = instance.getAllById(campId, 1);
+        for (CCMIdToCampIdMapping mapping : mappings) {
+            if(!mapping.isWithdrawn()) ccmIds.add(mapping.getCcmId());
         }
-
         return ccmIds;
+    }
+
+    public static boolean isWithdrawn(String ccmId, String campId) {
+        CCMIdToCampIdMapping mapping = instance.getMapping(ccmId, campId, 0, 1);
+        return mapping.isWithdrawn();
+    }
+
+    public static void updateWithdrawn(String ccmId, String campId) {
+        CCMIdToCampIdMapping ccmIdToCampIdMapping = instance.getMapping(ccmId, campId, 0, 1);
+        ccmIdToCampIdMapping.setWithdrawn(true);
+        instance.update(ccmId, 0, ccmIdToCampIdMapping);
     }
 
     // Additional methods (create/update/delete) can be added as needed
 
     public static void deleteMapping(String ccmId, String campId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String currentCCMId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (ccmId.trim().equals(currentCCMId) && campId.trim().equals(currentCampId)) {
-                        // Remove the row
-                        sheet.removeRow(row);
-
-                        // If the row is not the last row, shift the remaining rows up to fill the gap
-                        if (i < sheet.getLastRowNum()) {
-                            sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-                        }
-
-                        // Save the changes to the file
-                        try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                            workbook.write(fileOut);
-                        }
-
-                        // Adjust the row index after deletion
-                        i--;
-
-                        return; // Mapping deleted
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Mapping not found
+       instance.deleteIdMapping(ccmId, campId, 0, 1);
     }
 
     public static void deleteMappingsByCampId(String campId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-            Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (campId.trim().equals(currentCampId)) {
-                        // Remove the row
-                        sheet.removeRow(row);
-
-                        // If the row is not the last row, shift the remaining rows up to fill the gap
-                        if (i < sheet.getLastRowNum()) {
-                            sheet.shiftRows(i + 1, sheet.getLastRowNum(), -1);
-                        }
-
-                        // Save the changes to the file
-                        try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-                            workbook.write(fileOut);
-                        }
-
-                        // Adjust the row index after deletion
-                        i--;
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
+        instance.deleteMappingsById(campId, 0);
     }
 
 
     public static boolean isExists(String ccmId, String campId) {
-        try (FileInputStream file = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    String currentCCMId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-                    String currentCampId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
-
-                    if (ccmId.trim().equals(currentCCMId) && campId.trim().equals(currentCampId)) {
-                        return true; // Mapping exists
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
-
-        // Mapping not found
-        return false;
+        return (instance.getMapping(ccmId, campId, 0, 1) != null);
     }
     //  public static void main(String[] args) {
     //     testDB_CCMIdToCampId();

@@ -3,8 +3,16 @@ import java.util.ArrayList;
 public class Attendee extends Student implements AttendeeEnquiryInterface, AttendeeCampInterface{
     // need add in attribute for the enquiryIdToEnquiyObjMap and campIdToCampObjMap
 
-    public Attendee(String id, String password, String name, String email, boolean isCampCommittee){
-        super(id, password, name, email, isCampCommittee);
+    public Attendee(String id, String password, String name, String email, boolean isCampCommittee, String facultyId){
+        super(id, password, name, email, isCampCommittee, facultyId);
+    }
+
+    public Attendee(String id, String password, String name, String email, boolean isCampCommittee, boolean isNewLogin ,String facultyId){
+        super(id, password, name, email, isCampCommittee, isNewLogin ,facultyId);
+    }
+
+    public Attendee(Student student) {
+        super(student.getId(), student.getPassword(), student.getName(), student.getEmail(), student.getIsCampCommittee(), student.isNewLogin(), student.getFacultyId());
     }
 
 // Implementation of AttendeeEnquiryInterface
@@ -40,8 +48,7 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
     
     public void withdrawFromCampAsAttendee(String campId)
     {
-        DB_AttendeeIdToCampId.deleteMapping(this.getId(), campId);
-        DB_AttendeeIdToWithdrawnCampId.createMapping(this.getId(), campId);
+        DB_AttendeeIdToCampId.updateWithdrawn(this.getId(), campId);
         Camp updatedCamp = DB_Camp.readCamp(campId);
         updatedCamp.setTotalSlots(updatedCamp.getTotalSlots() - 1); 
         DB_Camp.updateCamp(updatedCamp);

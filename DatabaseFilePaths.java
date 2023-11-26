@@ -15,8 +15,8 @@ public class DatabaseFilePaths {
     public static final String STAFF = "database_excel_files/Staff.xlsx";
     public static final String STAFF_ID_TO_CAMP_ID = "database_excel_files/StaffIdToCampId.xlsx";
     public static final String STAFF_ID_TO_FACULTY_ID = "database_excel_files/StaffIdToFacultyId.xlsx";
-    public static final String ATTENDEE = "database_excel_files/Attendee.xlsx";
-    public static final String CCM = "database_excel_files/CCM.xlsx";
+    public static final String STUDENT = "database_excel_files/Student.xlsx";
+    public static final String CCMIdToPoints = "database_excel_files/CCMIdToPoints.xlsx";
     public static final String SUGGESTION = "database_excel_files/Suggestion.xlsx";
     public static final String FACULTY = "database_excel_files/Faculty.xlsx";
     public static final String CAMP_ID_TO_FACULTY_ID = "database_excel_files/CampIdToFacultyId.xlsx";

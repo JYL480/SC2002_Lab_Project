@@ -15,7 +15,16 @@ public class Suggestion {
 	private int newTotalSlots;
 	private int newCampCommitteeSlots;
 	private String newDescription;
+	private boolean newIsOpenToAll;
 
+
+	public boolean getNewIsOpenToAll() {
+		return newIsOpenToAll;
+	}
+
+	public void setNewIsOpenToAll(boolean newIsOpenToAll) {
+		this.newIsOpenToAll = newIsOpenToAll;
+	}
 
 	public Suggestion() {
 		this.id = "";  // Set a default value for id, you can change it to any default value you prefer
@@ -32,12 +41,13 @@ public class Suggestion {
 		this.newTotalSlots = 0;  // Set a default value for int fields
 		this.newCampCommitteeSlots = 0;  // Set a default value for int fields
 		this.newDescription = "";
+		this.newIsOpenToAll = false;
 	}
 
 	public Suggestion(String id, boolean isProcessed, boolean isApproved, String campId,
 					String newCampName, boolean newCampisVisible, LocalDate newCampStartDate,
 					LocalDate newCampEndDate, LocalDate newRegClosingDate, String newLocation,
-					int newTotalSlots, int newCampCommitteeSlots, String newDescription) {
+					int newTotalSlots, int newCampCommitteeSlots, String newDescription, boolean newIsOpenToAll) {
 		this.id = id;
 		this.isProcessed = isProcessed;
 		this.isApproved = isApproved;
@@ -51,6 +61,7 @@ public class Suggestion {
 		this.newTotalSlots = newTotalSlots;
 		this.newCampCommitteeSlots = newCampCommitteeSlots;
 		this.newDescription = newDescription;
+		this.newIsOpenToAll = newIsOpenToAll;
 	}
 
 
