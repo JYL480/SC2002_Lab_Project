@@ -1,4 +1,4 @@
 public interface CampCommitteeMemberReportInterface {
 
-    public void generateReportOfStudentsAttendingCamp(Camp camp, int filter);
+    public void generateReportOfStudentsAttendingWithCCMCamp(Camp camp);
 }
