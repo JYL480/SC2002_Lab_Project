@@ -99,10 +99,11 @@ public abstract class DB_Base<T> {
                 String id = row.getCell(idColumnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
                 if (entityId.equals(id)) {
+                    int rowNum = row.getRowNum();
                     sheet.removeRow(row);
 
-                    if (row.getRowNum() < sheet.getLastRowNum()) {
-                        sheet.shiftRows(row.getRowNum() + 1, sheet.getLastRowNum(), -1);
+                    if (rowNum < sheet.getLastRowNum()) {
+                        sheet.shiftRows(rowNum + 1, sheet.getLastRowNum(), -1);
                     }
 
                     try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
@@ -182,10 +183,11 @@ public abstract class DB_Base<T> {
                 String value2 = row.getCell(id2ColumnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
                 if (id1.equals(value1) && id2.equals(value2)) {
+                    int rowNum = row.getRowNum();
                     sheet.removeRow(row);
 
-                    if (row.getRowNum() < sheet.getLastRowNum()) {
-                        sheet.shiftRows(row.getRowNum() + 1, sheet.getLastRowNum(), -1);
+                    if (rowNum < sheet.getLastRowNum()) {
+                        sheet.shiftRows(rowNum + 1, sheet.getLastRowNum(), -1);
                     }
 
                     try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
@@ -213,10 +215,11 @@ public abstract class DB_Base<T> {
                 String value = row.getCell(idColumnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
                 if (id.equals(value)) {
+                    int rowNum = row.getRowNum();
                     sheet.removeRow(row);
 
-                    if (row.getRowNum() < sheet.getLastRowNum()) {
-                        sheet.shiftRows(row.getRowNum() + 1, sheet.getLastRowNum(), -1);
+                    if (rowNum < sheet.getLastRowNum()) {
+                        sheet.shiftRows(rowNum + 1, sheet.getLastRowNum(), -1);
                     }
                 }
             }

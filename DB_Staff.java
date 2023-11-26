@@ -91,25 +91,7 @@ public class DB_Staff extends DB_Base<Staff>{
     //     }
     // }
 
-    // public static void main(String[] args) {
-    //     try (FileInputStream file = new FileInputStream(FILE_PATH);
-    //          Workbook workbook = new XSSFWorkbook(file)) {
-
-    //         Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-    //         Iterator<Row> iterator = sheet.iterator();
-    //         iterator.next();
-    //         Row row = iterator.next();
-    //         row.createCell(4).setCellValue(true);
-
-    //         try (FileOutputStream fileOut = new FileOutputStream(FILE_PATH)) {
-    //             workbook.write(fileOut);
-    //         }
-
-    //     } catch (IOException e) {
-    //         e.printStackTrace(); // Handle the exception according to your needs
-    //     }
-
-    //     return; // Staff not found
-    // }
+    public static void main(String[] args) {
+        deleteStaff("a0881d6f93b64f29bfe02267cf9dc4c7");
+    }
 }
