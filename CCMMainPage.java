@@ -31,15 +31,13 @@ public class CCMMainPage implements Page {
                     return new ViewAndReplyEnquiriesPage();
                 case 3:
                     // Logic for viewing, editing, and deleting unprocessed suggestions
-                    return new EditDeleteSuggestionsPage();
+                    return new ViewEditDeleteSuggestionsPage();
                 case 4:
-                    return new ViewAllCcmSuggestionsPage();
-                case 5:
                     // Logic for generating camp reports
                     return new GenerateCampReportsPage();
-                case 6:
+                case 5:
                     return new ChangePasswordPage();
-                case 7:
+                case 6:
                     System.out.println("Exiting Main Menu...");
                     return new ExitPage();
                 default:

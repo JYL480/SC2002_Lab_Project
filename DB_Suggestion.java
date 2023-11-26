@@ -58,9 +58,6 @@ public class DB_Suggestion extends DB_Base<Suggestion> {
         return instance.getAll();
     }
 
-    public static ArrayList<Suggestion> getAllSuggestionsByCampId(String campId) {
-        return instance.getAllById(campId,4);
-    }
     // public static void main(String[] args) {
     //     // Test createSuggestion
     //     Suggestion suggestionOne = new Suggestion(RandomIdGenerator.generateRandomId(), false, true, "campId1",

@@ -65,7 +65,7 @@ public class StaffMainPage implements Page {
             System.out.println("1. Change Password");
             System.out.println("2. Create/Edit/View All Camps");
             System.out.println("3. View List of Students for a Camp");
-            System.out.println("4. View Pending Suggestions to Change Camp Details");
+            System.out.println("4. View Suggestions to Change Camp Details");
             System.out.println("5. Generate Reports");
             System.out.println("6. Exit");
             System.out.println("Enter your choice: ");
@@ -83,7 +83,7 @@ public class StaffMainPage implements Page {
                     case 3:
                         return new ViewCampRegistrationsPage();
                     case 4:
-                        return new ViewUnProcessedCampSuggestionsPage();
+                        return new ViewCampSuggestionsPage();
                     case 5:
                         return new GenerateReportsPage();
                     case 6:

@@ -92,7 +92,6 @@ public class DB_Staff extends DB_Base<Staff>{
     // }
 
     public static void main(String[] args) {
-        Staff staff = new Staff("1", "123", "sdfasdfsdf", "sdf", "sdfads");
-        DB_Staff.updateStaff(staff);
+        deleteStaff("a0881d6f93b64f29bfe02267cf9dc4c7");
     }
 }
