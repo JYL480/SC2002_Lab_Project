@@ -19,13 +19,8 @@ public class StaffMainPage implements Page{
             System.out.print("Enter your choice: ");
             int choice; 
             try {
-                choice = scanner.nextInt();
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid input.");
-                return new StaffMainPage();
-            }
-
-            switch (choice) {
+                choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
                 case 1:
                     return new ChangePasswordPage();
                 case 2:
@@ -43,6 +38,13 @@ public class StaffMainPage implements Page{
                     System.out.println("Invalid choice. Please try again.");
                     return new StaffMainPage();
             }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid input.");
+                return new StaffMainPage();
+            }
+
+            
         }
     }
 
