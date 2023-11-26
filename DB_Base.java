@@ -258,25 +258,7 @@ public abstract class DB_Base<T> {
     }
 
     public static void main(String[] args) {
-        String filePath = DatabaseFilePaths.ENQUIRY;
-         try (FileInputStream file = new FileInputStream(filePath);
-             Workbook workbook = new XSSFWorkbook(file)) {
-
-            Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = sheet.iterator();
-            Row row = iterator.next();
-            row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue("campId");
-            while (iterator.hasNext()) {
-                row = iterator.next();
-                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(12);
-                }
-                try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
-                workbook.write(fileOut);
-            }
-            } 
-        catch (IOException e) {
-            e.printStackTrace(); // Handle the exception according to your needs
-        }
+        
 
          // Mapping does not exist
     }

@@ -67,6 +67,7 @@ public class StudentBrowseAvailableCampsPage implements Page{
         System.out.println("Location: " + camp.getLocation());
         System.out.println("Start Date: " + camp.getStartDate());
         System.out.println("End Date: " + camp.getEndDate());
+        System.out.println("Registration deadline " + camp.getRegClosingDate());
         System.out.println("Total Slots: " + camp.getTotalSlots());
         System.out.println("Camp Committee Slots: " + camp.getCampCommitteeSlots());
         System.out.println("isOpenToAll: " + camp.isOpenToAll());
