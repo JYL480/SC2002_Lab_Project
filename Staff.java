@@ -253,32 +253,39 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     }
 
     public void generatePerformanceReportOfCampCommitteeMembers(Staff staff) {
-        // String campId = camp.getId();
 
+        ArrayList<Camp> camps = staff.viewSelfCreatedCamps();
 
-        // Get the list of attendee IDs for the camp 
-        // ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
-
-        // String csvFilePath = "CampCommitteeMemberPerformance.csv";
-        // ArrayList<String[]> data = new ArrayList<>();
-        // data.add(new String[]{"ccmName", "ccmId","Rating","AreasDoneWell","AreasToImprove"});
-
-
-
-        // for(String ccmId: ccmIds){
-        //     // System.out.println(ccmId);
+        ArrayList<String> campIdCreatedByStaff = new ArrayList<>();
+   
+        for(Camp CID : camps)
+        {
+            campIdCreatedByStaff.add(CID.getId());
+        }
         
-        //     CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
-        //     // System.out.println(ccm.getName());
-        //     ArrayList<String> performanceId = DB_CCMIdToPerformanceId.getPerformanceIds(ccmId);
-        //     for(String pid: performanceId){
-        //         Performance performance = DB_Performance.readPerformance(pid);
-               
-        //         data.add(new String[]{ccm.getName(), ccm.getId(),String.valueOf(performance.getRating()) ,performance.getAreasDoneWell(),performance.getAreasToImprove()});
-        //     }
-           
-        // }
-        // arrayListToCsv(data, csvFilePath);
+        ArrayList<Student> ccms = new ArrayList<>();
+    
+
+        String csvFilePath = "CampCommitteeMemberPerformance.csv";
+        ArrayList<String[]> data = new ArrayList<>();
+        data.add(new String[]{"ccmName", "ccmId","CampName","Rating"});
+
+        for(String cid: campIdCreatedByStaff){
+            
+            ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(cid);
+            Camp c = DB_Camp.readCamp(cid);
+
+            for(String ccmid: ccmIds){
+                ccms.add(DB_Student.readStudent(ccmid));
+            }
+            
+            
+            for(Student a: ccms){
+                data.add(new String[]{a.getName(),a.getId(), c.getName(), String.valueOf(DB_CCMIdToPoints.getPoints(a.getId()))});
+            }
+        } 
+        
+        arrayListToCsv(data, csvFilePath);
     }
 
     private static void arrayListToCsv(ArrayList<String[]> data, String csvFilePath) {
