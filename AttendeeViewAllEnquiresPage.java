@@ -12,7 +12,9 @@ public class AttendeeViewAllEnquiresPage implements Page {
 
         int index = 1;
         for (Enquiry enquiry : enquiries) {
-            System.out.println(index + ". Camp: " + enquiry.getCamp().getName() + " Subject: " + enquiry.getSubject());
+            
+            System.out.println(index + ". Camp: " + enquiry.getCamp().getName());
+            System.out.println(" Subject: " + enquiry.getSubject());
             index++;
         }
 
