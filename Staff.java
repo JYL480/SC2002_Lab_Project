@@ -132,105 +132,131 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
     }
 
     
-    public void generateReportOfStudentsAttendingSelfCreatedCamp(Camp camp, int filter) {
-        // Implement logic to generate a report of students attending a self-created camp
-        String campId = camp.getId();
+    public void generateReportOfStudentsAttendingSelfCreatedCamp(Staff staff) {
 
-        ArrayList<Attendee> attendees = new ArrayList<>();
-        ArrayList<CampCommitteeMember> ccms = new ArrayList<>();
+        ArrayList<Camp> camps = staff.viewSelfCreatedCamps();
 
-        // Get the list of attendee IDs for the camp
-        ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
-        ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
-
-        // Loop through the attendee IDs and retrieve the attendee objects
-        for (String attendeeId : attendeeIds) {
-            Attendee attendee = new Attendee(DB_Student.readStudent(attendeeId));
-            attendees.add(attendee);
+        ArrayList<String> campIdCreatedByStaff = new ArrayList<>();
+   
+        for(Camp CID : camps)
+        {
+            campIdCreatedByStaff.add(CID.getId());
         }
-
-        for (String ccmId : ccmIds) {
-            CampCommitteeMember ccm = new CampCommitteeMember(DB_Student.readStudent(ccmId), DB_CCMIdToPoints.getPoints(ccmId));
-            ccms.add(ccm);
-        }
-        // Filter options
-        // 1 = attendee
-        // 2 = ccm
-        // 3 = both
-
-
-        String csvFilePath = "CampParticipantReportbyStaff.csv";
+        
+        ArrayList<Student> attendees = new ArrayList<>();
+        // ArrayList<CampCommitteeMember> ccms = new ArrayList<>();
+   
+        String csvFilePath = "AttendeeParticipantReportbyStaff.csv";
         ArrayList<String[]> data = new ArrayList<>();
         data.add(new String[]{"StudentID","Email" ,"Name","CampName","Role"});
 
-        switch (filter) {
-            case 1:
-                for(Attendee a: attendees){
-                    data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
-                }
-                break;
-                
-            case 2:
-                for(CampCommitteeMember ccmss: ccms){
-                    data.add(new String[]{ccmss.getId(),ccmss.getEmail(),ccmss.getName(), camp.getName(), "CampCommitteeMember"});
-                }
-                break;
 
+        for(String cid: campIdCreatedByStaff){
+            
+            ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(cid);
+            Camp c = DB_Camp.readCamp(cid);
 
-            case 3:
-                for(Attendee a: attendees){
-                    data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
-                }
-                for(CampCommitteeMember ccmssss: ccms){
-                    data.add(new String[]{ccmssss.getId(),ccmssss.getEmail(),ccmssss.getName(), camp.getName(), "CampCommitteeMember"});
-                }
-                break;
-                
-
-            default:
-                System.out.println("Wrong input");
-        }
-        // switch (filter) {
-        //     case 1:
-        //         Sorting.insertionSort(attendees);
-        //         for (Attendee a : attendees) {
-        //             data.add(new String[]{a.getId(), a.getEmail(), a.getName(), camp.getName(), "Attendee"});
-        //         }
-        //         break;
-
-        //     case 2:
-        //         Sorting.insertionSort(ccms);
-        //         for (CampCommitteeMember ccm : ccms) {
-        //             data.add(new String[]{ccm.getId(), ccm.getEmail(), ccm.getName(), camp.getName(), "CampCommitteeMember"});
-        //         }
-        //         break;
-
-        //     case 3:
-        //         Sorting.insertionSort(attendees);
-        //         Sorting.insertionSort(ccms);
-
-        //         for (Attendee a : attendees) {
-        //             data.add(new String[]{a.getId(), a.getEmail(), a.getName(), camp.getName(), "Attendee"});
-        //         }
-
-        //         for (CampCommitteeMember ccm : ccms) {
-        //             data.add(new String[]{ccm.getId(), ccm.getEmail(), ccm.getName(), camp.getName(), "CampCommitteeMember"});
-        //         }
-        //         break;
-
-        //     default:
-        //         System.out.println("Wrong input");
-        // }
+            for(String aid: attendeeIds){
+                attendees.add(DB_Student.readStudent(aid));
+            }
+            
+            for(Student a: attendees){
+                data.add(new String[]{a.getId(),a.getEmail(),a.getName(), c.getName(), "Attendee"});
+            }
+        } 
         arrayListToCsv(data, csvFilePath);
-
     }
 
+    public void generateReportOfCCMAttendingSelfCreatedCamp(Staff staff) {
+        // Implement logic to generate a report of students attending a self-created camp
+           
+        ArrayList<Camp> camps = staff.viewSelfCreatedCamps();
 
-    public void generatePerformanceReportOfCampCommitteeMembers(Camp camp) {
+        ArrayList<String> campIdCreatedByStaff = new ArrayList<>();
+   
+        for(Camp CID : camps)
+        {
+            campIdCreatedByStaff.add(CID.getId());
+        }
+        
+        ArrayList<Student> ccms = new ArrayList<>();
+        // ArrayList<CampCommitteeMember> ccms = new ArrayList<>();
+   
+        String csvFilePath = "CCMParticipantReportbyStaff.csv";
+        ArrayList<String[]> data = new ArrayList<>();
+        data.add(new String[]{"CCMID","Email" ,"Name","CampName","Role"});
+
+
+        for(String cid: campIdCreatedByStaff){
+            
+            ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(cid);
+            Camp c = DB_Camp.readCamp(cid);
+
+            for(String ccmid: ccmIds){
+                ccms.add(DB_Student.readStudent(ccmid));
+            }
+            
+            for(Student a: ccms){
+                data.add(new String[]{a.getId(),a.getEmail(),a.getName(), c.getName(), "Attendee"});
+            }
+        } 
+        arrayListToCsv(data, csvFilePath);
+    }
+
+    public void generateReportWithFilterByCampName(Staff staff,String name) {
+        String csvFilePath = "CampReportCreatedbyStaff_FilteredByName.csv";
+        ArrayList<String[]> data = new ArrayList<>();
+        data.add(new String[]{"CampName", "CampID", "Location", "EndDate", "StartDate", "TotalSlots", "RegClosingDate", "CCMSlots", "Description"});
+        // int i =0;
+        ArrayList<Camp> camps = staff.viewSelfCreatedCamps();
+        ArrayList<String> campIdCreatedByStaff = new ArrayList<>();
+   
+        for(Camp CID : camps)
+        {
+            campIdCreatedByStaff.add(CID.getId());
+        }
+     
+        for(String campId: campIdCreatedByStaff){
+            Camp camp = DB_Camp.readCamp(campId);
+            String nama = camp.getName();
+            if (nama.startsWith(name)) {
+                data.add(new String[]{camp.getName(), camp.getId(), camp.getLocation(), camp.getEndDate().toString(), camp.getStartDate().toString(), Integer.toString(camp.getTotalSlots()), camp.getRegClosingDate().toString(), Integer.toString(camp.getCampCommitteeSlots()), camp.getDescription()});
+            }
+      
+        }
+            arrayListToCsv(data, csvFilePath);
+            System.out.println("ReportByName generated");
+    }
+
+    public void generateReportFilterByLocation(Staff staff,String location) {
+        String csvFilePath = "CampReportCreatedbyStaff_FilteredByLocation.csv";
+        ArrayList<String[]> data = new ArrayList<>();
+        data.add(new String[]{"CampName", "CampID", "Location", "EndDate", "StartDate", "TotalSlots", "RegClosingDate", "CCMSlots", "Description"});
+        
+        ArrayList<Camp> camps = staff.viewSelfCreatedCamps();
+        ArrayList<String> campIdCreatedByStaff = new ArrayList<>();
+   
+        for(Camp CID : camps)
+        {
+            campIdCreatedByStaff.add(CID.getId());
+        }
+
+        for(String campId: campIdCreatedByStaff){
+            Camp camp = DB_Camp.readCamp(campId);
+            String loc = camp.getLocation();
+            if (loc.equals(location)) {
+                data.add(new String[]{camp.getName(), camp.getId(), camp.getLocation(), camp.getEndDate().toString(), camp.getStartDate().toString(), Integer.toString(camp.getTotalSlots()), camp.getRegClosingDate().toString(), Integer.toString(camp.getCampCommitteeSlots()), camp.getDescription()});
+            }
+        }
+            arrayListToCsv(data, csvFilePath);
+            System.out.println("ReportByLocation generated");
+    }
+
+    public void generatePerformanceReportOfCampCommitteeMembers(Staff staff) {
         // String campId = camp.getId();
 
 
-        // // Get the list of attendee IDs for the camp 
+        // Get the list of attendee IDs for the camp 
         // ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
 
         // String csvFilePath = "CampCommitteeMemberPerformance.csv";
@@ -240,7 +266,10 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
 
 
         // for(String ccmId: ccmIds){
-        //     CampCommitteeMember ccm = DB_Student.readStudent(ccmId);
+        //     // System.out.println(ccmId);
+        
+        //     CampCommitteeMember ccm = DB_CCM.readCampCommitteeMember(ccmId);
+        //     // System.out.println(ccm.getName());
         //     ArrayList<String> performanceId = DB_CCMIdToPerformanceId.getPerformanceIds(ccmId);
         //     for(String pid: performanceId){
         //         Performance performance = DB_Performance.readPerformance(pid);
@@ -251,7 +280,6 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         // }
         // arrayListToCsv(data, csvFilePath);
     }
-    
 
     private static void arrayListToCsv(ArrayList<String[]> data, String csvFilePath) {
         try (FileWriter csvWriter = new FileWriter(csvFilePath)) {
@@ -273,4 +301,11 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
         DB_Staff.updateStaff(this);
     }
 
-}
+    
+    // public static void main(String[] args) {
+    //     Staff s = new Staff("sadfasdfe", "s1", "s1", "s1", "s1");
+    //     DB_Staff.createStaff(s);
+    //     s.generateReportOfStudentsAttendingSelfCreatedCamp(s);
+
+    // }
+}       

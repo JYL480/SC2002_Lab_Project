@@ -17,15 +17,16 @@ public class GenerateCampReportsPage implements Page {
                     System.out.println("Generating Report!");
                     ccm.generateReportOfStudentsAttendingWithCCMCamp(camp);
                     break;
+                case 2:
+                    System.out.println("Returning to Main Menu.");
+                    scanner.close();
+                    return new CCMMainPage();
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
                 
                 }
                 
-
-            scanner.close();
-            return new CCMMainPage();
         }
         
     }
