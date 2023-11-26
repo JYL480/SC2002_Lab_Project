@@ -100,6 +100,7 @@ public class Student extends User implements StudentCampInterface {
         DB_Camp.updateCamp(camp);
         this.setIsCampCommittee(true);
         DB_Student.updateStudent(this);
+        DB_CCMIdToPoints.createMapping(this.getId(), 0);
         return true; 
     }
 
