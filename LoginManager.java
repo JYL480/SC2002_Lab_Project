@@ -15,11 +15,13 @@ public class LoginManager {
             }
         }
         else {
+            
             Staff staff = DB_Staff.readStaffByEmail(email);
             if (staff != null && staff.getPassword().equals(password)) {
                 CommandLineApp.LoggedInUser = staff;
                 return true;
             } else {
+                System.out.println(staff.getPassword());
                 return false;
             }
         }
