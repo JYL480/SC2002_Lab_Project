@@ -114,4 +114,8 @@ public class DB_CCMIdToCampId extends DB_Base<CCMIdToCampIdMapping>{
     //     exists1 = DB_CCMIdToCampId.isExists(ccmId1, campId1);
     //     System.out.println("Mapping exists after deletion: " + exists1);
     // }
+    public static void main(String[] args) {
+        DB_CCMIdToCampId.createMapping("B789012","1b0327bbb247495a9d93274533ff97e2" );
+    }
+
 }

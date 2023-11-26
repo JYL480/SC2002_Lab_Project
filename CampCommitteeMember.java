@@ -133,67 +133,29 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
 		return DB_Camp.readCamp(campId);
 	}
 
-	public void generateReportOfStudentsAttendingCamp(Camp camp, int filter) {
+	public void generateReportOfStudentsAttendingWithCCMCamp(Camp camp) {
         // Implement logic to generate a report of students attending a self-created camp
         String campId = camp.getId();
 
-        ArrayList<Attendee> attendees = new ArrayList<>();
-        ArrayList<CampCommitteeMember> ccms = new ArrayList<>();
+        ArrayList<Student> students = new ArrayList<>();
+        // ArrayList<CampCommitteeMember> ccms = new ArrayList<>();
 
         // Get the list of attendee IDs for the camp
-        ArrayList<String> attendeeIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
-        ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
+        ArrayList<String> studentIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
+        // ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
 
         // Loop through the attendee IDs and retrieve the attendee objects
-        for (String attendeeId : attendeeIds) {
-            Attendee attendee = new Attendee(DB_Student.readStudent(attendeeId));
-			attendees.add(attendee);
+        for (String attendeeId : studentIds) {
+            Student student = DB_Student.readStudent(attendeeId);
+            students.add(student);
         }
-
-        for (String ccmId : ccmIds) {
-            Student student = DB_Student.readStudent(ccmId);
-            CampCommitteeMember ccm = new CampCommitteeMember(student, DB_CCMIdToPoints.getPoints(ccmId));
-			ccms.add(ccm);
-        }
-        // Filter options
-        // 1 = attendee
-        // 2 = ccm
-        // 3 = both
-
-
         String csvFilePath = "CampParticipantReportbyCCM.csv";
         ArrayList<String[]> data = new ArrayList<>();
         data.add(new String[]{"StudentID","Email" ,"Name","CampName","Role"});
-
-        switch (filter) {
-            case 1:
-                for(Attendee a: attendees){
-                    data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
-                }
-                break;
-                
-            case 2:
-                for(CampCommitteeMember ccmss: ccms){
-                    data.add(new String[]{ccmss.getId(),ccmss.getEmail(),ccmss.getName(), camp.getName(), "CampCommitteeMember"});
-                }
-                break;
-
-
-            case 3:
-                for(Attendee a: attendees){
-                    data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
-                }
-                for(CampCommitteeMember ccmssss: ccms){
-                    data.add(new String[]{ccmssss.getId(),ccmssss.getEmail(),ccmssss.getName(), camp.getName(), "CampCommitteeMember"});
-                }
-                break;
-                
-
-            default:
-                System.out.println("Wrong input");
-        }
-        arrayListToCsv(data, csvFilePath);
-
+		for(Student a: students){
+			data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
+		}
+		arrayListToCsv(data, csvFilePath);
     }
 	private static void arrayListToCsv(ArrayList<String[]> data, String csvFilePath) {
         try (FileWriter csvWriter = new FileWriter(csvFilePath)) {

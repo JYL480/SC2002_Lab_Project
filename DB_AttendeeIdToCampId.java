@@ -106,4 +106,7 @@ public class DB_AttendeeIdToCampId extends DB_Base<AttendeeIdToCampIdMapping>{
     //                 e.printStackTrace(); // Handle the exception according to your needs
     //             }
     //     }
+    public static void main(String[] args) {
+        DB_AttendeeIdToCampId.createMapping("A123456","1b0327bbb247495a9d93274533ff97e2" );
+    }
 }
