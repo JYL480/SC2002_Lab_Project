@@ -18,10 +18,11 @@ public class CCMMainPage implements Page {
             System.out.println("6. Exit");
 
             System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice; 
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
 
-            switch (choice) {
+                switch (choice) {
                 case 1:
                     // Logic for submitting suggestions for camp details
                     return new SubmitSuggestionsPage();
@@ -41,7 +42,14 @@ public class CCMMainPage implements Page {
                     return new ExitPage();
                 default:
                     System.out.println("Invalid choice. Please try again.");
+                    return new CCMMainPage();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid input.");
+                return new CCMMainPage();
             }
+
+            
         }
     }
 }

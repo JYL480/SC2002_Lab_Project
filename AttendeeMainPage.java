@@ -14,10 +14,11 @@ public class AttendeeMainPage implements Page {
             System.out.println("6. Exit");
 
             System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (choice) {
+            
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
                 case 1:
                     return new ChangePasswordPage();
                 case 2:
@@ -33,7 +34,16 @@ public class AttendeeMainPage implements Page {
                     return new ExitPage();
                 default:
                     System.out.println("Invalid choice. Please try again.");
+                    return new AttendeeMainPage();
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid input.");
+                return new AttendeeMainPage();
             }
+
+
+            
         }
     }
 }

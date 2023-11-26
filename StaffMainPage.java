@@ -17,11 +17,11 @@ public class StaffMainPage implements Page{
             System.out.println("6. Exit");
 
             System.out.print("Enter your choice: ");
-            int choice;
+            int choice; 
             try {
-                choice = Integer.parseInt(scanner.nextLine());
+                choice = scanner.nextInt();
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
+                System.out.println("Invalid input. Please enter a valid input.");
                 return new StaffMainPage();
             }
 

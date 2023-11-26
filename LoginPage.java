@@ -11,20 +11,32 @@ public class LoginPage implements Page{
         System.out.println("2. Camp committee member");
         System.out.println("3. Staff");
         System.out.println("Enter choice: ");
-        int choice = Integer.parseInt(scanner.nextLine());
-        switch (choice) {
-            case 1:
-                CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
-                break;
-            case 2:
-                CommandLineApp.LoggedInUserType = UserType.CCM;
-                break;
-            case 3:
-                CommandLineApp.LoggedInUserType = UserType.STAFF;
-                break;
-            default:
-                break;
+
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+            if (choice >= 1 && choice <= 3) {
+                switch (choice) {
+                    case 1:
+                        CommandLineApp.LoggedInUserType = UserType.ATTENDEE;
+                        break;
+                    case 2:
+                        CommandLineApp.LoggedInUserType = UserType.CCM;
+                        break;
+                    case 3:
+                        CommandLineApp.LoggedInUserType = UserType.STAFF;
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid integer between 1 and 3.");
+            loginInfoInput();
         }
+
         //UserID input
         System.out.println("Enter User ID: ");
         String userID = scanner.nextLine();
