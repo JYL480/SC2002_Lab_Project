@@ -62,21 +62,29 @@ public class LoginPage implements Page{
         System.out.println("Welcome");
 
         Scanner scanner = new Scanner(System.in);
-        int choice;
+        int choice = 0;
 
         do {
-            System.out.println("Press 1 to proceed to login");
-            System.out.println("Press any other key to exit");
-            System.out.print("Enter choice: ");
-            choice = Integer.parseInt(scanner.nextLine());
+            try {
+                System.out.println("Press 1 to proceed to login");
+                System.out.println("Press any other key to exit");
+                System.out.print("Enter choice: ");
+            
+            
+                choice = Integer.parseInt(scanner.nextLine());
 
-            switch (choice) {
-                case 1:
-                    loginInfoInput();
-                    break;
-                default:
-                    return new ExitPage();
+                switch (choice) {
+                    case 1:
+                        loginInfoInput();
+                        break;
+                    default:
+                        return new ExitPage();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer between 1 and 3.");
+                return new LoginPage();
             }
+            
         } while (CommandLineApp.LoggedInUser == null && choice == 1);
         
         // find out whether this is the first time the user is logging in
