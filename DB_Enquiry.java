@@ -19,7 +19,7 @@ public class DB_Enquiry extends DB_Base<Enquiry>{
         String replyText = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
         String repliedByName = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
         boolean repliedByStaff = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getBooleanCellValue();
-        String campId = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String campId = row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
 
         return new Enquiry(id, subject, description, isProcessed, replyText, repliedByName, repliedByStaff, campId);
     }
@@ -104,4 +104,4 @@ public class DB_Enquiry extends DB_Base<Enquiry>{
     //         System.out.println(enquiry.getSubject());
     //     }
     // }
-}
+    }
