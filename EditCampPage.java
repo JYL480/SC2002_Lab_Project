@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -41,7 +42,7 @@ public class EditCampPage implements Page {
             System.out.println("Open to All: " + selectedCamp.isOpenToAll());
 
             // Ask for confirmation to edit
-            System.out.print("\nPress 1 to confirm and edit the camp, or any other key to go back: ");
+            System.out.print("\nPress 1 and edit the camp, or any other key to go back: ");
             String confirmationChoice = scanner.nextLine();
 
             if (confirmationChoice.equals("1")) {
@@ -52,21 +53,174 @@ public class EditCampPage implements Page {
                     selectedCamp.setName(newCampName);
                 }
 
-                System.out.print("Enter New Camp Visibility (true/false, blank for no change): ");
-                String newVisibilityString = scanner.nextLine();
-                if (!newVisibilityString.isBlank()) {
-                    selectedCamp.setIsVisible(Boolean.parseBoolean(newVisibilityString));
+                // Editing Camp Visibility
+                boolean newVisibility;
+                do {
+                    System.out.print("Enter New Camp Visibility (true/false, blank for no change): ");
+                    String newVisibilityString = scanner.nextLine();
+                    if (newVisibilityString.isBlank()) {
+                        break; // No change, exit the loop
+                    }
+                    try {
+                        if(newVisibilityString.equals("true")) {
+                            newVisibility = true;
+                            selectedCamp.setIsVisible(newVisibility);
+                            break;
+                        }
+                        else if (newVisibilityString.equals("false")) {
+                            newVisibility = false;
+                            selectedCamp.setIsVisible(newVisibility);
+                            break;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid input. Please enter 'true' or 'false'.");
+                    }
+                } while (true);
+
+                // Editing Camp Start Date
+                LocalDate newStartDate;
+                do {
+                    try {
+                        System.out.print("Enter New Camp Start Date (YYYY-MM-DD, blank for no change): ");
+                        String newStartDateString = scanner.nextLine();
+                        if (newStartDateString.isBlank()) {
+                            break; // No change, exit the loop
+                        }
+                        newStartDate = LocalDate.parse(newStartDateString);
+                        selectedCamp.setStartDate(newStartDate);
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                    }
+                } while (true);
+
+                // Editing Camp End Date
+                LocalDate newEndDate;
+                do {
+                    try {
+                        System.out.print("Enter New Camp End Date (YYYY-MM-DD, blank for no change): ");
+                        String newEndDateString = scanner.nextLine();
+                        if (newEndDateString.isBlank()) {
+                            break; // No change, exit the loop
+                        }
+                        newEndDate = LocalDate.parse(newEndDateString);
+                        selectedCamp.setEndDate(newEndDate);
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                    }
+                } while (true);
+
+                // Editing Registration Closing Date
+                LocalDate newRegClosingDate;
+                do {
+                    try {
+                        System.out.print("Enter New Registration Closing Date (YYYY-MM-DD, blank for no change): ");
+                        String newRegClosingDateString = scanner.nextLine();
+                        if (newRegClosingDateString.isBlank()) {
+                            break; // No change, exit the loop
+                        }
+                        newRegClosingDate = LocalDate.parse(newRegClosingDateString);
+                        selectedCamp.setRegClosingDate(newRegClosingDate);
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                    }
+                } while (true);
+
+                // Editing Camp Location
+                System.out.print("Enter New Camp Location (blank for no change): ");
+                String newLocation = scanner.nextLine();
+                if (!newLocation.isBlank()) {
+                    selectedCamp.setLocation(newLocation);
                 }
 
-                // Repeat the process for other fields...
+                // Editing Total Slots
+                int newTotalSlots;
+                do {
+                    try {
+                        System.out.print("Enter New Total Slots (blank for no change): ");
+                        String newTotalSlotsString = scanner.nextLine();
+                        if (newTotalSlotsString.isBlank()) {
+                            break; // No change, exit the loop
+                        }
+                        newTotalSlots = Integer.parseInt(newTotalSlotsString);
+                        selectedCamp.setTotalSlots(newTotalSlots);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a valid integer.");
+                    }
+                } while (true);
 
+                // Editing Committee Slots
+                int newCommitteeSlots;
+                do {
+                    try {
+                        System.out.print("Enter New Committee Slots (blank for no change): ");
+                        String newCommitteeSlotsString = scanner.nextLine();
+                        if (newCommitteeSlotsString.isBlank()) {
+                            break; // No change, exit the loop
+                        }
+                        newCommitteeSlots = Integer.parseInt(newCommitteeSlotsString);
+                        selectedCamp.setCampCommitteeSlots(newCommitteeSlots);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a valid integer.");
+                    }
+                } while (true);
+
+                // Editing Camp Description
+                System.out.print("Enter New Camp Description (blank for no change): ");
+                String newDescription = scanner.nextLine();
+                if (!newDescription.isBlank()) {
+                    selectedCamp.setDescription(newDescription);
+                }
+
+                // Editing Open to All
+                boolean newOpenToAll;
+                do {
+                    System.out.print("Enter New Open to All (true/false, blank for no change): ");
+                    String newOpenToAllString = scanner.nextLine();
+                    if (newOpenToAllString.isBlank()) {
+                        break; // No change, exit the loop
+                    }
+                    try {
+                        newOpenToAll = Boolean.parseBoolean(newOpenToAllString);
+                        selectedCamp.setOpenToAll(newOpenToAll);
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid input. Please enter 'true' or 'false'.");
+                    }
+                } while (true);
+
+                // Display the updated camp details
+                System.out.println("\n===== Updated Camp Details =====");
+                System.out.println("Name: " + selectedCamp.getName());
+                System.out.println("Visibility: " + selectedCamp.getIsVisible());
+                System.out.println("Start Date: " + selectedCamp.getStartDate());
+                System.out.println("End Date: " + selectedCamp.getEndDate());
+                System.out.println("Registration Closing Date: " + selectedCamp.getRegClosingDate());
+                System.out.println("Location: " + selectedCamp.getLocation());
+                System.out.println("Total Slots: " + selectedCamp.getTotalSlots());
+                System.out.println("Committee Slots: " + selectedCamp.getCampCommitteeSlots());
+                System.out.println("Description: " + selectedCamp.getDescription());
+                System.out.println("Open to All: " + selectedCamp.isOpenToAll());
+
+                // Ask for final confirmation to update
+                System.out.print("\nPress 1 to confirm and update the camp, or any other key to discard changes: ");
+                String finalConfirmationChoice = scanner.nextLine();
+
+                if (finalConfirmationChoice.equals("1")){
                 // Update the camp
-                boolean success = staff.editCamp(selectedCamp);
+                    boolean success = staff.editCamp(selectedCamp);
 
-                if (success) {
-                    System.out.println("Camp edited successfully!");
+                    if (success) {
+                        System.out.println("Camp edited successfully!");
+                    } else {
+                        System.out.println("Failed to edit the camp. Please try again.");
+                    }
                 } else {
-                    System.out.println("Failed to edit the camp. Please try again.");
+                    System.out.println("Camp editing canceled. Returning to the previous menu.");
                 }
             } else {
                 System.out.println("Camp editing canceled. Returning to the previous menu.");

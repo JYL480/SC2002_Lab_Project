@@ -47,6 +47,8 @@ public class AttendeeSubmitNewEnquiriesPage implements Page {
         Enquiry newEnquiry = new Enquiry();
         newEnquiry.setSubject(subject);
         newEnquiry.setDescription(description);
+        newEnquiry.setId(RandomIdGenerator.generateRandomId());
+        newEnquiry.setCampId(attendeeCamps.get(selectedCampIndex-1).getId());
 
         // Submit the enquiry
         attendee.submitEnquiry(newEnquiry);

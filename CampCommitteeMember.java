@@ -144,6 +144,8 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
         ArrayList<String> studentIds = DB_AttendeeIdToCampId.getAttendeeIds(campId);
         // ArrayList<String> ccmIds = DB_CCMIdToCampId.getCCMIds(campId);
 
+		studentIds.addAll(DB_CCMIdToCampId.getCCMIds(campId));
+
         // Loop through the attendee IDs and retrieve the attendee objects
         for (String attendeeId : studentIds) {
             Student student = DB_Student.readStudent(attendeeId);
@@ -153,7 +155,10 @@ public class CampCommitteeMember extends Student implements CampCommitteeMemberS
         ArrayList<String[]> data = new ArrayList<>();
         data.add(new String[]{"StudentID","Email" ,"Name","CampName","Role"});
 		for(Student a: students){
-			data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), "Attendee"});
+			String role = new String();
+			if (a.getIsCampCommittee()) role = "Camp committee member";
+			else role = "Attendee";
+			data.add(new String[]{a.getId(),a.getEmail(),a.getName(), camp.getName(), role});
 		}
 		arrayListToCsv(data, csvFilePath);
     }

@@ -15,7 +15,7 @@ public class EditDeleteSuggestionsPage implements Page {
 
         // Get all unprocessed suggestions made by the current CCM
         ArrayList<Suggestion> unprocessedSuggestions = currentCCM.viewAllSuggestions();
-        unprocessedSuggestions.removeIf(Suggestion::getIsProcessed); // Remove processed suggestions
+        if (!unprocessedSuggestions.isEmpty()) unprocessedSuggestions.removeIf(Suggestion::getIsProcessed); // Remove processed suggestions
 
         // Display unprocessed suggestions
         displaySuggestions(unprocessedSuggestions);

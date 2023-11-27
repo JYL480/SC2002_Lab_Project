@@ -88,7 +88,7 @@ public class Student extends User implements StudentCampInterface {
          */
         if(camp.getCampCommitteeSlots() == 0 || 
         camp.getTotalSlots() == 0 || 
-        this.isCampCommittee || 
+        this.isCampCommittee || DB_AttendeeIdToCampId.isExists(this.getId(), camp.getId()) || 
         camp.getRegClosingDate().isBefore(LocalDate.now())
         )
         {

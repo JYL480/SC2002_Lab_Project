@@ -11,6 +11,7 @@ public class AttendeeEnquiryPage implements Page {
         System.out.println("2. Edit an Enquiry");
         System.out.println("3. Submit a new Enquiry");
         System.out.println("0. Go back to the main menu");
+        System.out.print("Enter your choice: ");
 
         int choice;
         try {

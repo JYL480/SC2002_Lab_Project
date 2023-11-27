@@ -33,8 +33,8 @@ public class LoginPage implements Page{
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a valid integer between 1 and 3.");
-            loginInfoInput();
+            System.out.println("Invalid input. Try Again");
+            return;
         }
 
         //UserID input
@@ -59,7 +59,7 @@ public class LoginPage implements Page{
     }
 
     public Page show() {
-        System.out.println("Welcome");
+        System.out.println("==== Welcome ====");
 
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
@@ -81,8 +81,7 @@ public class LoginPage implements Page{
                         return new ExitPage();
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid integer between 1 and 3.");
-                return new LoginPage();
+                return new ExitPage();
             }
             
         } while (CommandLineApp.LoggedInUser == null && choice == 1);

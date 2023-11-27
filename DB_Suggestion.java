@@ -59,7 +59,7 @@ public class DB_Suggestion extends DB_Base<Suggestion> {
     }
 
     public static ArrayList<Suggestion> getAllSuggestionsByCampId(String campId) {
-        return instance.getAllById(campId,4);
+        return instance.getAllById(campId,3);
     }
     // public static void main(String[] args) {
     //     // Test createSuggestion

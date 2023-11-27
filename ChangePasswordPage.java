@@ -9,8 +9,8 @@ public class ChangePasswordPage implements Page{
         System.out.println("Press 1 to proceed with changing the password");
         System.out.println("Press any other key to exit");
         System.out.print("Enter choice: ");
-        int choice = Integer.parseInt(scanner.nextLine());
-        if (choice == 1) {
+        String choice = scanner.nextLine();
+        if (choice.equals("1")) {
             System.out.println("Enter current password: ");
             String currentPassword = scanner.nextLine();
             if (CommandLineApp.LoggedInUserType == UserType.STAFF) {

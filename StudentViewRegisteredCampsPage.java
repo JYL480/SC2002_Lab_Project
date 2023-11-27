@@ -35,14 +35,9 @@ public class StudentViewRegisteredCampsPage implements Page {
         // You may want to add logic to go back to the main menu or another page.
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press '1' to go back to the main menu: ");
-        while (true) {
-            String input = scanner.nextLine();
-            if ("1".equals(input.trim())) {
-                return new AttendeeMainPage();
-            } else {
-                System.out.println("Invalid input! Press '1' to go back to the main menu: ");
-            }
-        }
+        System.out.println("Press any key to go back: ");
+        String option = scanner.nextLine();
+        return new AttendeeMainPage();
     }
 
     private void printCampDetails(Camp camp) {

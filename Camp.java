@@ -109,6 +109,7 @@ public class Camp {
 
 	public ArrayList<Student> getAllStudents() {
 	ArrayList<String> studentIds = DB_AttendeeIdToCampId.getAttendeeIds(this.id);
+	studentIds.addAll(DB_CCMIdToCampId.getCCMIds(this.id));
 	ArrayList<Student> studentList = new ArrayList<>();
 	for(String studentId : studentIds){
 		studentList.add(DB_Student.readStudent(studentId));

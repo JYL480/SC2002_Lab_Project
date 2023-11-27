@@ -12,10 +12,11 @@ public class CCMMainPage implements Page {
             System.out.println("===== Main Menu =====");
             System.out.println("1. Submit Suggestions for Camp Details");
             System.out.println("2. View and Reply to Student Enquiries");
-            System.out.println("3. View, Edit, and Delete Unprocessed Suggestions");
-            System.out.println("4. Generate Camp Reports");
-            System.out.println("5. Change Password");
-            System.out.println("6. Exit");
+            System.out.println("3. View Suggestions");
+            System.out.println("4. Edit and Delete Unprocessed Suggestions");
+            System.out.println("5. Generate Camp Reports");
+            System.out.println("6. Change Password");
+            System.out.println("7. Exit");
 
             System.out.print("Enter your choice: ");
             int choice; 

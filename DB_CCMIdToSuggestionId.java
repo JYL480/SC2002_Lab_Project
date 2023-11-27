@@ -13,7 +13,7 @@ public class DB_CCMIdToSuggestionId extends DB_Base<CCMIdToSuggestionIdMapping> 
     @Override
     protected CCMIdToSuggestionIdMapping createEntity(Row row) {
         String ccmId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-        String suggestionId = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+        String suggestionId = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
         return new CCMIdToSuggestionIdMapping(ccmId, suggestionId);
     }
 

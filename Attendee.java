@@ -50,7 +50,7 @@ public class Attendee extends Student implements AttendeeEnquiryInterface, Atten
     {
         DB_AttendeeIdToCampId.updateWithdrawn(this.getId(), campId);
         Camp updatedCamp = DB_Camp.readCamp(campId);
-        updatedCamp.setTotalSlots(updatedCamp.getTotalSlots() - 1); 
+        updatedCamp.setTotalSlots(updatedCamp.getTotalSlots() + 1); 
         DB_Camp.updateCamp(updatedCamp);
     }
 

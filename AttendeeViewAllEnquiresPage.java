@@ -27,6 +27,9 @@ public class AttendeeViewAllEnquiresPage implements Page {
                 } else if (choice >= 1 && choice <= enquiries.size()) {
                     Enquiry selectedEnquiry = enquiries.get(choice - 1);
                     viewEnquiryDetails(selectedEnquiry);
+                    System.out.println("Press any key to go back: ");
+                    String option = scanner.nextLine();
+                    return new AttendeeEnquiryPage();
                 } else {
                     System.out.println("Invalid choice! Try again.");
                 }

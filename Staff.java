@@ -109,7 +109,7 @@ public class Staff extends User implements StaffAttendeeEnquiryInterface, StaffC
 
   
     public boolean editCamp(Camp camp) {
-        if (camp.getStaffId() == this.getId()) {
+        if (camp.getStaffId().equals(this.getId())) {
             DB_Camp.updateCamp(camp);
             return true;
         }

@@ -11,38 +11,106 @@ public class CreateCampPage implements Page {
         System.out.println("===== Create Camp =====");
 
         // Gather information for the new camp
-        System.out.print("Enter Camp Name: ");
-        String campName = scanner.nextLine();
+        String campName;
+        do {
+            System.out.print("Enter Camp Name: ");
+            campName = scanner.nextLine();
+        } while (campName.isEmpty());
 
-        System.out.print("Enter Camp Visibility (true/false): ");
-        boolean isVisible = Boolean.parseBoolean(scanner.nextLine());
+        // Camp Visibility
+        boolean isVisible;
+        do {
+            System.out.print("Enter Camp Visibility (true/false): ");
+            try {
+                isVisible = Boolean.parseBoolean(scanner.nextLine());
+                break; // Break out of the loop if parsing is successful
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter 'true' or 'false'.");
+            }
+        } while (true);
 
-        System.out.print("Enter Camp Start Date (YYYY-MM-DD): ");
-        String startDateString = scanner.nextLine();
-        LocalDate startDate = LocalDate.parse(startDateString);
+        // Camp Start Date
+        LocalDate startDate;
+        do {
+            try {
+                System.out.print("Enter Camp Start Date (YYYY-MM-DD): ");
+                String startDateString = scanner.nextLine();
+                startDate = LocalDate.parse(startDateString);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            }
+        } while (true);
 
-        System.out.print("Enter Camp End Date (YYYY-MM-DD): ");
-        String endDateString = scanner.nextLine();
-        LocalDate endDate = LocalDate.parse(endDateString);
+        // Camp End Date
+        LocalDate endDate;
+        do {
+            try {
+                System.out.print("Enter Camp End Date (YYYY-MM-DD): ");
+                String endDateString = scanner.nextLine();
+                endDate = LocalDate.parse(endDateString);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            }
+        } while (true);
 
-        System.out.print("Enter Registration Closing Date (YYYY-MM-DD): ");
-        String regClosingDateString = scanner.nextLine();
-        LocalDate regClosingDate = LocalDate.parse(regClosingDateString);
+        // Registration Closing Date
+        LocalDate regClosingDate;
+        do {
+            try {
+                System.out.print("Enter Registration Closing Date (YYYY-MM-DD): ");
+                String regClosingDateString = scanner.nextLine();
+                regClosingDate = LocalDate.parse(regClosingDateString);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+            }
+        } while (true);
 
+        // Camp Location
         System.out.print("Enter Camp Location: ");
         String location = scanner.nextLine();
 
-        System.out.print("Enter Total Slots: ");
-        int totalSlots = Integer.parseInt(scanner.nextLine());
+        // Total Slots
+        int totalSlots;
+        do {
+            try {
+                System.out.print("Enter Total Slots: ");
+                totalSlots = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        } while (true);
 
-        System.out.print("Enter Camp Committee Slots: ");
-        int committeeSlots = Integer.parseInt(scanner.nextLine());
+        // Camp Committee Slots
+        int committeeSlots;
+        do {
+            try {
+                System.out.print("Enter Camp Committee Slots: ");
+                committeeSlots = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+            }
+        } while (true);
 
+        // Camp Description
         System.out.print("Enter Camp Description: ");
         String description = scanner.nextLine();
 
-        System.out.print("Enter if Camp is Open to All (true/false): ");
-        boolean isOpenToAll = Boolean.parseBoolean(scanner.nextLine());
+        // Camp Open to All
+        boolean isOpenToAll;
+        do {
+            System.out.print("Enter if Camp is Open to All (true/false): ");
+            try {
+                isOpenToAll = Boolean.parseBoolean(scanner.nextLine());
+                break; // Break out of the loop if parsing is successful
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter 'true' or 'false'.");
+            }
+        } while (true);
 
         // Display the camp details for confirmation
         System.out.println("\n===== Camp Details =====");

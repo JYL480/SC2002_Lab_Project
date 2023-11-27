@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,13 +52,13 @@ public class ViewUnProcessedCampSuggestionsPage implements Page {
     private void displaySuggestionsForCamp(Camp camp) {
         System.out.println("====== Suggestions for Camp " + camp.getName() + " ======");
         List<Suggestion> suggestions = DB_Suggestion.getAllSuggestionsByCampId(camp.getId());
-
         int i = 0;
-        for (Suggestion suggestion : suggestions) {
+        Iterator<Suggestion> iterator = suggestions.iterator();
+        while (iterator.hasNext()) {
+            Suggestion suggestion = iterator.next();
             if (suggestion.getIsProcessed()) {
-                suggestions.remove(i);
+                iterator.remove();  // Use iterator's remove method
             }
-            i++;
         }
 
         for (i = 0; i < suggestions.size(); i++) {
