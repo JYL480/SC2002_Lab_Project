@@ -45,7 +45,6 @@ public class GenerateReportsPage implements Page {
                     break;
                 case 6:
                     System.out.println("Returning to Main Menu.");
-                    scanner.close();
                     return new StaffMainPage();
                 default:
                     System.out.println("Invalid choice. Please try again.");

@@ -32,9 +32,9 @@ public class CCMMainPage implements Page {
                     return new ViewAndReplyEnquiriesPage();
                 case 3:
                     // Logic for viewing, editing, and deleting unprocessed suggestions
-                    return new EditDeleteSuggestionsPage();
-                case 4:
                     return new ViewAllCcmSuggestionsPage();
+                case 4:
+                    return new EditDeleteSuggestionsPage();
                 case 5:
                     // Logic for generating camp reports
                     return new GenerateCampReportsPage();

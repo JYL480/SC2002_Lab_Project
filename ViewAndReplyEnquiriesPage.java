@@ -10,6 +10,7 @@ public class ViewAndReplyEnquiriesPage implements Page{
         int index = 1;
         for (Enquiry en: enquiries){ 
             System.out.println(index + ". " + en.getSubject());
+            System.out.println("Description: " + en.getDescription());
             index++;
         }
 

@@ -81,7 +81,7 @@ public class EditDeleteSuggestionsPage implements Page {
             System.out.println("Comment: " + suggestion.getComment());
             System.out.println();
         }
-        System.out.println("================");
+        System.out.println("====================================");
     }
 
     private void editSuggestion(Suggestion suggestion) {
